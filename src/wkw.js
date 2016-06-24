@@ -19,6 +19,22 @@ var UserInformation = {
     isExpired() { return new Date() - this.expiration > 10000; }
 };
 
+// Study Queue (user.study_queue)
+// @expiration (Number) - unix timestamp for last refresh
+// @lessons_available (Number) - number of lessons currently available
+// @reviews_available (Number) - number of reviews currently available
+// @next_review_date (Number or null) - unix timestamp for next review (or null if vacation mode)
+// @reviews_available_next_hour (Number) - number of reviews available within the next hour
+// @reviews_available_next_day (Number) - number of reviews available within the next day
+var StudyQueue = {
+    "expiration": new Date(),
+    isExpired() { return new Date() - this.expiration > 10000; }
+};
+
+// Constructor for user objects.
+// @key (Number) - user's WK API key
+// @getUserInformation(callback) - retrieves the user's information
+// @getStudyQueue(callback) - retrieves the user's study queue
 function User(api_key) {
     var resultUser = {
         key: api_key,
@@ -44,8 +60,26 @@ function User(api_key) {
                 that.user_information.vacation_date = data.user_information.vacation_date;
                 callback();
             });
+        },
+        getStudyQueue(callback) {
+            if (!this.study_queue.isExpired() && this.study_queue.lessons_available != null) { callback(); }
+            var that = this;
+            var wk_url = "https://www.wanikani.com/api/user/";
+            var request = $.ajax({
+                url: wk_url + this.key + "/study-queue",
+                type: "GET",
+            });
+            request.done(function(data) {
+                that.study_queue.lessons_available = data.requested_information.lessons_available;
+                that.study_queue.reviews_available = data.requested_information.reviews_available;
+                that.study_queue.next_review_date = data.requested_information.next_review_date;
+                that.study_queue.reviews_available_next_hour = data.requested_information.reviews_available_next_hour;
+                that.study_queue.reviews_available_next_day = data.requested_information.reviews_available_next_day;
+                callback();
+            });
         }
     };
     resultUser.user_information = new Object(UserInformation);
+    resultUser.study_queue = new Object(StudyQueue);
     return resultUser;
 }
