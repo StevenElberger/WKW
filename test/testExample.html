@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>The HTML5 Herald</title>
+    <link rel="stylesheet" type="text/css" href="../test/mocha.css">
+</head>
+
+<body>
+    <div id="mocha"></div>
+
+    <!-- Load test libraries -->
+    <script src="jquery.min.js"></script>
+    <script src="jquery.mockjax.min.js"></script>
+    <script src="chai.js"></script>
+    <script src="mocha.js"></script>
+
+    <!-- Use BDD interface for Mocha -->
+    <script>mocha.setup('bdd')</script>
+
+    <!-- Load test file(s) -->
+    <script src="../src/wkw.js"></script>
+    <script src="testUserinformation.js"></script>
+
+    <script>
+        mocha.checkLeaks();
+        mocha.globals(['jQuery']);
+        mocha.run();
+    </script>
+</body>
+</html>

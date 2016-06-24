@@ -1,5 +1,3 @@
-var chai = require('chai');
-var wkw = require('./../src/wkw');
 var assert = chai.assert;
 
 describe('User', function() {
