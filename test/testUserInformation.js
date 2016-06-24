@@ -22,31 +22,49 @@ describe('UserInformation', function() {
             "requested_information": null
         }
     });
-    // make the call to get data
-    testUser.getUserInformation();
 
-    it('should have a username', function() {
-        assert.isNotNull(testUser.userInformation);
-        assert.isNotNull(testUser.username);
+    it('should have a valid username', function(done) {
+        testUser.getUserInformation(function() {
+            assert.isNotNull(testUser.user_information.username);
+            assert.isAbove(testUser.user_information.username.length, 0);
+            done();
+        });
     });
 
-    it('should have a level', function() {
-        assert.isNotNull(testUser.level);
+    it('should have a valid level', function() {
+        testUser.getUserInformation(function() {
+            assert.isNotNull(testUser.user_information.level);
+            assert.isNumber(testUser.user_information.level);
+            assert.isAtLeast(testUser.user_information.level, 1);
+        });
     });
 
-    it('should have a title', function() {
-        assert.isNotNull(testUser.title);
+    it('should have a valid title', function() {
+        testUser.getUserInformation(function() {
+            assert.isNotNull(testUser.user_information.title);
+            assert.isAbove(testUser.user_information.title.length, 0);
+        });
     });
 
     it('should have topics_count', function() {
-        assert.isNotNull(testUser.topics_count);
+        testUser.getUserInformation(function() {
+            assert.isNotNull(testUser.user_information.topics_count);
+            assert.isNumber(testUser.user_information.topics_count);
+            assert.isAtLeast(testUser.user_information.topics_count, 0);
+        });
     });
 
     it('should have posts_count', function() {
-        assert.isNotNull(testUser.posts_count);
+        testUser.getUserInformation(function() {
+            assert.isNotNull(testUser.user_information.posts_count);
+            assert.isNumber(testUser.user_information.posts_count);
+            assert.isAtLeast(testUser.user_information.posts_count, 0);
+        });
     });
 
     it('should have a creation_date', function() {
-        assert.isNotNull(testUser.creation_date);
+        testUser.getUserInformation(function() {
+            assert.isNotNull(testUser.user_information.creation_date);
+        });
     });
 });
