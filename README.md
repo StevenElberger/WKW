@@ -1,2 +1,2 @@
 # WKW
-A JavaScript wrapper for the WaniKani API
+A client-side JavaScript wrapper for the WaniKani API
