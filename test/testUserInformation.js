@@ -4,7 +4,7 @@ describe('UserInformation', function() {
     var testUser = new User('bbf426d6937cbb77d9f908c08d90c3ce');
     // mock the service
     $.mockjax({
-        url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce",
+        url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/",
         responseText: {
             "user_information": {
                 "username": "TestUser",
