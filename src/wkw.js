@@ -47,6 +47,18 @@ function Proto(expirationTime, apiResourceLoc, userResourceLoc) {
 // @kanji_total (Number) - total number of kanji for this level
 
 
+// SRS Distribution Prototype (user.srs_distribution)
+// @apprentice (Object) - items at apprentice level
+// --@radicals (Number) - the number of radicals
+// --@kanji (Number) - the number of kanji
+// --@vocabulary (Number) - the number of vocabulary
+// --@total (Number) - the total number of items
+// @guru (Object) - items at guru level (same structure as apprentice)
+// @master (Object) - items at master level (same structure as apprentice)
+// @enlighten (Object) - items at enlighten level (same structure as apprentice)
+// @burned (Object) - items at burned level (same structure as apprentice)
+
+
 // Retrieves data for given object.
 // @user (object) - the user object
 // @obj (object) - the object whose data needs to be retrieved
@@ -86,6 +98,10 @@ var getStudyQueue = function(callback) { retrieveObjectData(this, this.study_que
 // @callback (fn) - callback function.
 var getLevelProgression = function(callback) { retrieveObjectData(this, this.level_progression, callback); };
 
+// Retrieves the user's SRS distribution
+// @callback (fun) - callback function.
+var getSRSDistribution = function(callback) { retrieveObjectData(this, this.srs_distribution, callback); };
+
 // Constructor for user objects.
 // @key (Number) - user's WK API key
 // @getUserInformation(callback) - retrieves the user's information
@@ -97,8 +113,10 @@ function User(api_key) {
     resultUser.user_information = new Proto(21600000, "", "user_information");
     resultUser.study_queue = new Proto(900000, "study-queue", "study_queue");
     resultUser.level_progression = new Proto(900000, "level-progression", "level_progression");
+    resultUser.srs_distribution = new Proto(900000, "srs-distribution", "srs_distribution");
     resultUser.getUserInformation = getUserInformation;
     resultUser.getStudyQueue = getStudyQueue;
     resultUser.getLevelProgression = getLevelProgression;
+    resultUser.getSRSDistribution = getSRSDistribution;
     return resultUser;
 };
