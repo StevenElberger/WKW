@@ -35,7 +35,20 @@ var StudyQueue = {
     isExpired() { return new Date() - this.expiration > this.time; }
 };
 
-// Retrieves the user information.
+// Level Progression Prototype (user.level_progression)
+// @time - time limit before data is expired
+// @expiration (Number) - unix timestamp for last refresh
+// @radicals_progress (Number) - number of radicals completed for the current level
+// @radicals_total (Number) - total number of radicals for this level
+// @kanji_progress (Number) - number of kanji completed for the current level
+// @kanji_total (Number) - total number of kanji for this level
+var LevelProgression = {
+    "time": 900000,
+    "expiration": new Date(),
+    isExpired() { return new Date() - this.expiration > this.time; }
+};
+
+// Retrieves the user's information.
 // @param callback (fn) - callback function
 var getUserInformation = function(callback) {
     if (!this.user_information.isExpired() && this.user_information.username != null) { callback(); }
@@ -59,7 +72,20 @@ var getStudyQueue = function(callback) {
             that.study_queue[d] = data.requested_information[d];
         callback();
     });
-}
+};
+
+// Retrieves the user's level progression.
+// @param callback (fn) - callback function.
+var getLevelProgression = function(callback) {
+    if (!this.level_progression.isExpired() && this.level_progression.radicals_progress != null) { callback(); }
+    var that = this;
+    var wk_url = "https://www.wanikani.com/api/user/" + this.key + "/level-progression";
+    $.getJSON(wk_url, function(data) {
+        for (var d in data.level_progression)
+            that.level_progression[d] = data.level_progression[d];
+        callback();
+    });
+};
 
 // Constructor for user objects.
 // @key (Number) - user's WK API key
