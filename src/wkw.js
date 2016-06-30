@@ -59,6 +59,25 @@ function Proto(expirationTime, apiResourceLoc, userResourceLoc) {
 // @burned (Object) - items at burned level (same structure as apprentice)
 
 
+// Recent Unlocks List Prototype (user.recent_unlocks)
+// 3 different types of objects in here
+// --Common attributes--
+// @type (String) - type of item in list
+// @character (String) - the character(s) for this item
+// @meaning (String) - comma separated string of meanings
+// @level (Number) - the level at which this item was unlocked
+// @unlocked_date (Number) - unix timestamp for when this item was unlocked
+// --Vocabulary--
+// @kana (String) - the katakana or hiragana representation for this word
+// --Radical--
+// @image (String or null) - the URL of the image, if any (otherwise null)
+// --Kanji--
+// @onyomi (String) - the on'yomi reading for this kanji
+// @kunyomi (String) - the kun'yomi reading for this kanji
+// @nanori (String or null) - the nanori reading for this kanji
+// @important_reading (String) - which reading is important (onyomi, kunyomi, or nanori)
+
+
 // Retrieves data for given object.
 // @user (object) - the user object
 // @obj (object) - the object whose data needs to be retrieved
@@ -98,9 +117,13 @@ var getStudyQueue = function(callback) { retrieveObjectData(this, this.study_que
 // @callback (fn) - callback function.
 var getLevelProgression = function(callback) { retrieveObjectData(this, this.level_progression, callback); };
 
-// Retrieves the user's SRS distribution
+// Retrieves the user's SRS distribution.
 // @callback (fun) - callback function.
 var getSRSDistribution = function(callback) { retrieveObjectData(this, this.srs_distribution, callback); };
+
+// Retrieves the user's recent unlocks list.
+// @callback (fun) - callback function.
+var getRecentUnlocksList = function(callback) { retrieveObjectData(this, this.recent_unlocks, callback); };
 
 // Constructor for user objects.
 // @key (Number) - user's WK API key
