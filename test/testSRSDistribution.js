@@ -68,6 +68,10 @@ describe('StudyQueue', function() {
 
     it('should have a valid number of items for apprentice level', function() {
         testUser.getStudyQueue(function() {
+            assert.isNotNull(testUser.srs_distribution.apprentice.radicals);
+            assert.isNotNull(testUser.srs_distribution.apprentice.kanji);
+            assert.isNotNull(testUser.srs_distribution.apprentice.vocabulary);
+            assert.isNotNull(testUser.srs_distribution.apprentice.total);
             assert.isNumber(testUser.srs_distribution.apprentice.radicals);
             assert.isAtLeast(testUser.srs_distribution.apprentice.radicals,0);
             assert.isNumber(testUser.srs_distribution.apprentice.kanji);
@@ -81,6 +85,10 @@ describe('StudyQueue', function() {
 
     it('should have a valid number of items for guru level', function() {
         testUser.getStudyQueue(function() {
+            assert.isNotNull(testUser.srs_distribution.guru.radicals);
+            assert.isNotNull(testUser.srs_distribution.guru.kanji);
+            assert.isNotNull(testUser.srs_distribution.guru.vocabulary);
+            assert.isNotNull(testUser.srs_distribution.guru.total);
             assert.isNumber(testUser.srs_distribution.guru.radicals);
             assert.isAtLeast(testUser.srs_distribution.guru.radicals,0);
             assert.isNumber(testUser.srs_distribution.guru.kanji);
@@ -94,6 +102,10 @@ describe('StudyQueue', function() {
 
     it('should have a valid number of items for master level', function() {
         testUser.getStudyQueue(function() {
+            assert.isNotNull(testUser.srs_distribution.master.radicals);
+            assert.isNotNull(testUser.srs_distribution.master.kanji);
+            assert.isNotNull(testUser.srs_distribution.master.vocabulary);
+            assert.isNotNull(testUser.srs_distribution.master.total);
             assert.isNumber(testUser.srs_distribution.master.radicals);
             assert.isAtLeast(testUser.srs_distribution.master.radicals,0);
             assert.isNumber(testUser.srs_distribution.master.kanji);
@@ -107,6 +119,10 @@ describe('StudyQueue', function() {
 
     it('should have a valid number of items for enlighten level', function() {
         testUser.getStudyQueue(function() {
+            assert.isNotNull(testUser.srs_distribution.enlighten.radicals);
+            assert.isNotNull(testUser.srs_distribution.enlighten.kanji);
+            assert.isNotNull(testUser.srs_distribution.enlighten.vocabulary);
+            assert.isNotNull(testUser.srs_distribution.enlighten.total);
             assert.isNumber(testUser.srs_distribution.enlighten.radicals);
             assert.isAtLeast(testUser.srs_distribution.enlighten.radicals,0);
             assert.isNumber(testUser.srs_distribution.enlighten.kanji);
@@ -120,6 +136,10 @@ describe('StudyQueue', function() {
 
     it('should have a valid number of items for burned level', function() {
         testUser.getStudyQueue(function() {
+            assert.isNotNull(testUser.srs_distribution.burned.radicals);
+            assert.isNotNull(testUser.srs_distribution.burned.kanji);
+            assert.isNotNull(testUser.srs_distribution.burned.vocabulary);
+            assert.isNotNull(testUser.srs_distribution.burned.total);
             assert.isNumber(testUser.srs_distribution.burned.radicals);
             assert.isAtLeast(testUser.srs_distribution.burned.radicals,0);
             assert.isNumber(testUser.srs_distribution.burned.kanji);

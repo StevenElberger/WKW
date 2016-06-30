@@ -10,12 +10,12 @@
 // @expiration (Number) - unix timestamp for account creation
 // @isExpired (fn) - returns whether or not this data has expired
 function Proto(expirationTime, apiResourceLoc, userResourceLoc) {
-    this["time"] = expirationTime;
-    this["isEmpty"] = true;
-    this["apiResourceLoc"] = apiResourceLoc;
-    this["userResourceLoc"] = userResourceLoc;
-    this["expiration"] = new Date();
-    this["isExpired"] = function() { return new Date() - this.expiration > this.time; };
+    this.time = expirationTime;
+    this.isEmpty = true;
+    this.apiResourceLoc = apiResourceLoc;
+    this.userResourceLoc = userResourceLoc;
+    this.expiration = new Date();
+    this.isExpired = function() { return new Date() - this.expiration > this.time; };
 };
 
 // User Information Prototype (user.user_information)
