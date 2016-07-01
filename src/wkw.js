@@ -111,14 +111,41 @@ function Proto(expirationTime, apiResourceLoc, userResourceLoc) {
 // -- @burned_date (Number) - unix timestamp for when this item was burned (0 if not)
 // -- @meaning_correct (Number) - number of times meaning was answered correctly
 // -- @meaning_incorrect (Number) - number of times meaning was answered incorrectly
-// -- @meaning_max_streak (Number) - number of times meaning was answered correctly consecutively
-// -- @meaning_current_streak (Number) - current streak of consecutively correct answers
+// -- @meaning_max_streak (Number) - highest number of times meaning was answered correctly consecutively
+// -- @meaning_current_streak (Number) - current number of times meaning was answered correctly consecutively
 // -- @reading_correct (Null)
 // -- @reading_incorrect (Null)
 // -- @reading_max_streak (Null)
 // -- @reading_current_streak (Null)
 // -- @meaning_note (Null)
 // -- @user_synonyms (Array or null) - user created synonyms for this radical
+
+
+// Kanji List Prototype (user.kanji)
+// @character (String) - character for this kanji
+// @meaning (String) - meaning(s) of this kanji
+// @onyomi (String) - on'yomi reading for this kanji
+// @kunyomi (String) - kun'yomi reading for this kanji
+// @nanori (String) - nanori reading for this kanji
+// @important_reading (String) - which reading is important (onyomi, kunyomi, or nanori)
+// @level (Number) - level at which this kanji was unlocked
+// @user_specific (Object) - user specific information
+// -- @srs (String) - the group this item is in (apprentice, guru, etc.)
+// -- @srs_numeric (Number) - tbd
+// -- @unlocked_date (Number) - unix timestamp for when this item was unlocked
+// -- @available_date (Number) - unix timestamp for when this item will be reviewed again
+// -- @burned (Boolean) - whether or not this item is burned
+// -- @burned_date (Number) - unix timestamp for when this item was burned (0 if not)
+// -- @meaning_correct (Number) - number of times meaning was answered correctly
+// -- @meaning_incorrect (Number) - number of times meaning was answered incorrectly
+// -- @meaning_max_streak (Number) - highest number of times meaning was answered correctly consecutively
+// -- @meaning_current_streak (Number) - current streak of consecutively correct answers
+// -- @reading_correct (Number or null) - number of times reading was answered correctly
+// -- @reading_incorrect (Number or null) - number of times reading was answered incorrectly
+// -- @reading_max_streak (Number or null) - highest number of times meaning was answered correctly consecutively
+// -- @reading_current_streak (Number or null) - current number of times meaning was answered correctly consecutively
+// -- @meaning_note (String or null) - user-created notes for meaning
+// -- @user_synonyms (Array or null) - user-created synonyms for this item
 
 
 // Retrieves data for given object.
@@ -176,6 +203,9 @@ var getCriticalItemsList = function(callback) { retrieveObjectData(this, this.cr
 // @callback (fn) - callback function.
 var getRadicalsList = function(callback) { retrieveObjectData(this, this.radicals, callback); };
 
+// Retrieves the user's kanji list.
+// @callback (fn) - callback function.
+var getKanjiList = function(callback) { retrieveObjectData(this, this.kanji, callback); };
 
 // Constructor for user objects.
 // @key (Number) - user's WK API key
@@ -192,6 +222,7 @@ function User(api_key) {
     resultUser.recent_unlocks = new Proto(900000, "recent-unlocks", "recent_unlocks");
     resultUser.critical_items = new Proto(900000, "critical-items", "critical_items");
     resultUser.radicals = new Proto(900000, "radicals", "radicals");
+    resultUser.kanji = new Proto(900000, "kanji", "kanji");
     resultUser.getUserInformation = getUserInformation;
     resultUser.getStudyQueue = getStudyQueue;
     resultUser.getLevelProgression = getLevelProgression;
@@ -199,5 +230,6 @@ function User(api_key) {
     resultUser.getRecentUnlocksList = getRecentUnlocksList;
     resultUser.getCriticalItemsList = getCriticalItemsList;
     resultUser.getRadicalsList = getRadicalsList;
+    resultUser.getKanjiList = getKanjiList;
     return resultUser;
 };

@@ -96,8 +96,8 @@ describe('Radicals', function() {
             assert.isNotNull(testUser.radicals[1].meaning);
             assert.isString(testUser.radicals[0].meaning);
             assert.isString(testUser.radicals[1].meaning);
-            assert.isEqual(testUser.radicals[0].meaning, "stick");
-            assert.isEqual(testUser.radicals[1].meaning, "gun");
+            assert.equal(testUser.radicals[0].meaning, "stick");
+            assert.equal(testUser.radicals[1].meaning, "gun");
         });
     });
 
@@ -109,8 +109,8 @@ describe('Radicals', function() {
             assert.isNotNull(testUser.radicals[1].image);
             assert.isString(testUser.radicals[0].image);
             assert.isString(testUser.radicals[1].image);
-            assert.isEqual(testUser.radicals[0].image, "https://s3.amazonaws.com/s3.wanikani.com/images/radicals/802e9542627291d4282601ded41ad16ce915f60f.png");
-            assert.isEqual(testUser.radicals[1].image, "https://s3.amazonaws.com/s3.wanikani.com/images/radicals/80fff71b321c8cee57db7224f5fe1daa331128b5.png");
+            assert.equal(testUser.radicals[0].image, "https://s3.amazonaws.com/s3.wanikani.com/images/radicals/802e9542627291d4282601ded41ad16ce915f60f.png");
+            assert.equal(testUser.radicals[1].image, "https://s3.amazonaws.com/s3.wanikani.com/images/radicals/80fff71b321c8cee57db7224f5fe1daa331128b5.png");
         });
     });
 
