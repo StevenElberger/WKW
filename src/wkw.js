@@ -137,9 +137,11 @@ function User(api_key) {
     resultUser.study_queue = new Proto(900000, "study-queue", "study_queue");
     resultUser.level_progression = new Proto(900000, "level-progression", "level_progression");
     resultUser.srs_distribution = new Proto(900000, "srs-distribution", "srs_distribution");
+    resultUser.recent_unlocks = new Proto(900000, "recent-unlocks", "recent_unlocks");
     resultUser.getUserInformation = getUserInformation;
     resultUser.getStudyQueue = getStudyQueue;
     resultUser.getLevelProgression = getLevelProgression;
     resultUser.getSRSDistribution = getSRSDistribution;
+    resultUser.getRecentUnlocksList = getRecentUnlocksList;
     return resultUser;
 };
