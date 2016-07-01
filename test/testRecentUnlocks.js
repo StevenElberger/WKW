@@ -137,10 +137,16 @@ describe('RecentUnlocksList', function() {
         });
     });
 
+    it('should have valid nanori for kanji', function() {
+        testUser.getRecentUnlocksList(function() {
+            assert.isDefined(testUser.recent_unlocks[2].nanori);
+        });
+    });
+
     it('should have valid important reading for kanji', function() {
        testUser.getRecentUnlocksList(function() {
             assert.isNotNull(testUser.recent_unlocks[2].important_reading);
-           assert.isString(testUser.recent_unlocks[2].important_reading);
+            assert.isString(testUser.recent_unlocks[2].important_reading);
        });
     });
 });

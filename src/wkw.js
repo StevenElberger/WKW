@@ -78,6 +78,24 @@ function Proto(expirationTime, apiResourceLoc, userResourceLoc) {
 // @important_reading (String) - which reading is important (onyomi, kunyomi, or nanori)
 
 
+// Critical Items List Prototype (user.critical_items)
+// 3 different types of objects in here
+// --Common attributes--
+// @type (String) - type of item in list
+// @character (String) - the character(s) for this item
+// @meaning (String) - comma separated string of meanings
+// @level (Number) - the level at which this item was unlocked
+// @percentage (Number) - what percentage this item has been reviewed correctly
+// --Vocabulary--
+// @kana (String) - the katakana or hiragana for this item
+// --Radical--
+// @image (String) - the url for this item
+// --Kanji--
+// @onyomi (String) - the on'yomi reading for this kanji
+// @kunyomi (String) - the kun'yomi reading for this kanji
+// @nanori (String or null) - the nanori reading for this kanji
+// @important_reading (String) - which reading is important (onyomi, kunyomi, or nanori)
+
 // Retrieves data for given object.
 // @user (object) - the user object
 // @obj (object) - the object whose data needs to be retrieved
@@ -118,12 +136,16 @@ var getStudyQueue = function(callback) { retrieveObjectData(this, this.study_que
 var getLevelProgression = function(callback) { retrieveObjectData(this, this.level_progression, callback); };
 
 // Retrieves the user's SRS distribution.
-// @callback (fun) - callback function.
+// @callback (fn) - callback function.
 var getSRSDistribution = function(callback) { retrieveObjectData(this, this.srs_distribution, callback); };
 
 // Retrieves the user's recent unlocks list.
-// @callback (fun) - callback function.
+// @callback (fn) - callback function.
 var getRecentUnlocksList = function(callback) { retrieveObjectData(this, this.recent_unlocks, callback); };
+
+// Retrieves the user's critical items list.
+// @callback (fn) - callback function.
+var getCriticalItemsList = function(callback) { retrieveObjectData(this, this.critical_items, callback); };
 
 // Constructor for user objects.
 // @key (Number) - user's WK API key
@@ -138,10 +160,12 @@ function User(api_key) {
     resultUser.level_progression = new Proto(900000, "level-progression", "level_progression");
     resultUser.srs_distribution = new Proto(900000, "srs-distribution", "srs_distribution");
     resultUser.recent_unlocks = new Proto(900000, "recent-unlocks", "recent_unlocks");
+    resultUser.critical_items = new Proto(900000, "critical-items", "critical_items");
     resultUser.getUserInformation = getUserInformation;
     resultUser.getStudyQueue = getStudyQueue;
     resultUser.getLevelProgression = getLevelProgression;
     resultUser.getSRSDistribution = getSRSDistribution;
     resultUser.getRecentUnlocksList = getRecentUnlocksList;
+    resultUser.getCriticalItemsList = getCriticalItemsList;
     return resultUser;
 };
