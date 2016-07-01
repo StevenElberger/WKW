@@ -112,14 +112,13 @@ function Proto(expirationTime, apiResourceLoc, userResourceLoc) {
 // -- @meaning_correct (Number) - number of times meaning was answered correctly
 // -- @meaning_incorrect (Number) - number of times meaning was answered incorrectly
 // -- @meaning_max_streak (Number) - highest number of times meaning was answered correctly consecutively
-// -- @meaning_current_streak (Number) - current number of times meaning was answered correctly consecutively
-// -- @reading_correct (Null)
-// -- @reading_incorrect (Null)
-// -- @reading_max_streak (Null)
-// -- @reading_current_streak (Null)
-// -- @meaning_note (Null)
-// -- @user_synonyms (Array or null) - user created synonyms for this radical
-
+// -- @meaning_current_streak (Number) - current streak of consecutively correct answers
+// -- @reading_correct (Number or null) - number of times reading was answered correctly
+// -- @reading_incorrect (Number or null) - number of times reading was answered incorrectly
+// -- @reading_max_streak (Number or null) - highest number of times meaning was answered correctly consecutively
+// -- @reading_current_streak (Number or null) - current number of times meaning was answered correctly consecutively
+// -- @meaning_note (String or null) - user-created notes for meaning
+// -- @user_synonyms (Array or null) - user-created synonyms for this item
 
 // Kanji List Prototype (user.kanji)
 // @character (String) - character for this kanji
@@ -129,23 +128,15 @@ function Proto(expirationTime, apiResourceLoc, userResourceLoc) {
 // @nanori (String) - nanori reading for this kanji
 // @important_reading (String) - which reading is important (onyomi, kunyomi, or nanori)
 // @level (Number) - level at which this kanji was unlocked
-// @user_specific (Object) - user specific information
-// -- @srs (String) - the group this item is in (apprentice, guru, etc.)
-// -- @srs_numeric (Number) - tbd
-// -- @unlocked_date (Number) - unix timestamp for when this item was unlocked
-// -- @available_date (Number) - unix timestamp for when this item will be reviewed again
-// -- @burned (Boolean) - whether or not this item is burned
-// -- @burned_date (Number) - unix timestamp for when this item was burned (0 if not)
-// -- @meaning_correct (Number) - number of times meaning was answered correctly
-// -- @meaning_incorrect (Number) - number of times meaning was answered incorrectly
-// -- @meaning_max_streak (Number) - highest number of times meaning was answered correctly consecutively
-// -- @meaning_current_streak (Number) - current streak of consecutively correct answers
-// -- @reading_correct (Number or null) - number of times reading was answered correctly
-// -- @reading_incorrect (Number or null) - number of times reading was answered incorrectly
-// -- @reading_max_streak (Number or null) - highest number of times meaning was answered correctly consecutively
-// -- @reading_current_streak (Number or null) - current number of times meaning was answered correctly consecutively
-// -- @meaning_note (String or null) - user-created notes for meaning
-// -- @user_synonyms (Array or null) - user-created synonyms for this item
+// @user_specific (Object) - user specific information (see user.radicals.user_specific)
+
+
+// Vocabulary List Prototype (user.vocabulary)
+// @character (String) - character for this word
+// @kana (String) - hiragana or katakana for this word
+// @meaning (String) - meaning(s) of this word
+// @level (Number) - level at which this item was unlocked
+// @user_specific (Object) - user specific information (see user.radicals.user_specific)
 
 
 // Retrieves data for given object.
@@ -207,8 +198,13 @@ var getRadicalsList = function(callback) { retrieveObjectData(this, this.radical
 // @callback (fn) - callback function.
 var getKanjiList = function(callback) { retrieveObjectData(this, this.kanji, callback); };
 
+// Retrieves the user's voabulary list.
+// @callback (fn) - callback function.
+var getVocabularyList = function(callback) { retrieveObjectData(this, this.vocabulary, callback); };
+
+
 // Constructor for user objects.
-// @key (Number) - user's WK API key
+// @key (Number) - user's WK API key<F12>
 // @getUserInformation(callback) - retrieves the user's information
 // @getStudyQueue(callback) - retrieves the user's study queue
 function User(api_key) {
@@ -223,6 +219,7 @@ function User(api_key) {
     resultUser.critical_items = new Proto(900000, "critical-items", "critical_items");
     resultUser.radicals = new Proto(900000, "radicals", "radicals");
     resultUser.kanji = new Proto(900000, "kanji", "kanji");
+    resultUser.vocabulary = new Proto(900000, "vocabulary", "vocabulary");
     resultUser.getUserInformation = getUserInformation;
     resultUser.getStudyQueue = getStudyQueue;
     resultUser.getLevelProgression = getLevelProgression;
@@ -231,5 +228,6 @@ function User(api_key) {
     resultUser.getCriticalItemsList = getCriticalItemsList;
     resultUser.getRadicalsList = getRadicalsList;
     resultUser.getKanjiList = getKanjiList;
+    resultUser.getVocabularyList = getVocabularyList;
     return resultUser;
 };

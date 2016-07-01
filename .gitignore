@@ -41,3 +41,8 @@ jspm_packages
 
 # Webstorm config files
 .idea/
+
+# Vim
+*~
+*.swp
+*.swo
