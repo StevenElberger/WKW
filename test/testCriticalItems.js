@@ -1,6 +1,6 @@
 var assert = chai.assert;
 
-describe('RecentUnlocksList', function() {
+describe('CriticalItemsList', function() {
     var testUser = new User('bbf426d6937cbb77d9f908c08d90c3ce');
     // mock the service
     $.mockjax({

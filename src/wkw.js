@@ -96,6 +96,31 @@ function Proto(expirationTime, apiResourceLoc, userResourceLoc) {
 // @nanori (String or null) - the nanori reading for this kanji
 // @important_reading (String) - which reading is important (onyomi, kunyomi, or nanori)
 
+
+// Radicals List Prototype (user.radicals)
+// @character (String or null) - the character for this radical
+// @meaning (String) - the meaning of this radical
+// @image (String) - url for the image of this radical
+// @level (Number) - the level at which this radical was unlocked
+// @user_specific (Object) - user specific information
+// -- @srs (String) - the group this item is in (apprentice, guru, etc.)
+// -- @srs_numeric (Number) - tbd
+// -- @unlocked_date (Number) - unix timestamp for when this item was unlocked
+// -- @available_date (Number) - unix timestamp for when this item will be reviewed again
+// -- @burned (Boolean) - whether or not this item is burned
+// -- @burned_date (Number) - unix timestamp for when this item was burned (0 if not)
+// -- @meaning_correct (Number) - number of times meaning was answered correctly
+// -- @meaning_incorrect (Number) - number of times meaning was answered incorrectly
+// -- @meaning_max_streak (Number) - number of times meaning was answered correctly consecutively
+// -- @meaning_current_streak (Number) - current streak of consecutively correct answers
+// -- @reading_correct (Null)
+// -- @reading_incorrect (Null)
+// -- @reading_max_streak (Null)
+// -- @reading_current_streak (Null)
+// -- @meaning_note (Null)
+// -- @user_synonyms (Array or null) - user created synonyms for this radical
+
+
 // Retrieves data for given object.
 // @user (object) - the user object
 // @obj (object) - the object whose data needs to be retrieved
@@ -147,6 +172,11 @@ var getRecentUnlocksList = function(callback) { retrieveObjectData(this, this.re
 // @callback (fn) - callback function.
 var getCriticalItemsList = function(callback) { retrieveObjectData(this, this.critical_items, callback); };
 
+// Retrieves the user's radicals list.
+// @callback (fn) - callback function.
+var getRadicalsList = function(callback) { retrieveObjectData(this, this.radicals, callback); };
+
+
 // Constructor for user objects.
 // @key (Number) - user's WK API key
 // @getUserInformation(callback) - retrieves the user's information
@@ -161,11 +191,13 @@ function User(api_key) {
     resultUser.srs_distribution = new Proto(900000, "srs-distribution", "srs_distribution");
     resultUser.recent_unlocks = new Proto(900000, "recent-unlocks", "recent_unlocks");
     resultUser.critical_items = new Proto(900000, "critical-items", "critical_items");
+    resultUser.radicals = new Proto(900000, "radicals", "radicals");
     resultUser.getUserInformation = getUserInformation;
     resultUser.getStudyQueue = getStudyQueue;
     resultUser.getLevelProgression = getLevelProgression;
     resultUser.getSRSDistribution = getSRSDistribution;
     resultUser.getRecentUnlocksList = getRecentUnlocksList;
     resultUser.getCriticalItemsList = getCriticalItemsList;
+    resultUser.getRadicalsList = getRadicalsList;
     return resultUser;
 };
