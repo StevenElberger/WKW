@@ -143,9 +143,11 @@ function Proto(expirationTime, apiResourceLoc, userResourceLoc) {
 // @user (object) - the user object
 // @obj (object) - the object whose data needs to be retrieved
 // @callback (fn) - the callback function
-function retrieveObjectData(user, obj, callback) {
-    if (!isExpiredOrEmpty(obj)) { callback(); }
+// @param (Number) - optional parameter
+function retrieveObjectData(user, obj, callback, param) {
+    if (!isExpiredOrEmpty(obj) && typeof param === "undefined") { callback(); }
     var wk_url = "https://www.wanikani.com/api/user/" + user.key + "/" + obj.apiResourceLoc;
+    if (typeof param !== "undefined") { wk_url += "/" + param; }
     $.getJSON(wk_url, function(data) {
         if (obj.userResourceLoc === "user_information") {
             for (var d in data.user_information)
@@ -166,6 +168,26 @@ function isExpiredOrEmpty(obj) {
     return obj.isExpired() || obj.isEmpty;
 };
 
+// Checks if given levels are valid for
+// radicals, vocabulary, or kanji lists.
+// @levels (String or Number) - levels requested
+function levelsAreValid(levels) {
+    if (typeof levels === "number" && levels >= 1 && levels <= 60) {
+        return true;
+    } else if (typeof levels === "string") {
+        var givenLevels = levels.split(",");
+        var validLevels = true;
+        for (var lvl in givenLevels) {
+            if (givenLevels[lvl] < 1 || givenLevels[lvl] > 60) {
+                validLevels = false;
+                break;
+            }
+        }
+        return validLevels;
+    }
+    return false;
+}
+
 // Retrieves the user's information.
 // @callback (fn) - callback function
 var getUserInformation = function(callback) { retrieveObjectData(this, this.user_information, callback); };
@@ -184,23 +206,68 @@ var getSRSDistribution = function(callback) { retrieveObjectData(this, this.srs_
 
 // Retrieves the user's recent unlocks list.
 // @callback (fn) - callback function.
-var getRecentUnlocksList = function(callback) { retrieveObjectData(this, this.recent_unlocks, callback); };
+// @limit (Number) - limit for number of items returned
+var getRecentUnlocksList = function(limit, callback) {
+    if (typeof limit === "function") // no limit, this is the callback
+        retrieveObjectData(this, this.recent_unlocks, limit);
+    else
+        if (typeof limit === "number" && limit >= 1 && limit <= 100)
+            retrieveObjectData(this, this.recent_unlocks, callback, limit);
+        else
+            retrieveObjectData(this, this.recent_unlocks, callback);
+};
 
 // Retrieves the user's critical items list.
 // @callback (fn) - callback function.
-var getCriticalItemsList = function(callback) { retrieveObjectData(this, this.critical_items, callback); };
+// @percentage (Number) - percentage correct
+var getCriticalItemsList = function(percentage, callback) {
+    if (typeof percentage === "function") // no percentage, this is the callback
+        retrieveObjectData(this, this.critical_items, percentage);
+    else
+        if (typeof percentage === "number" && percentage >= 0 && percentage <= 100)
+            retrieveObjectData(this, this.critical_items, callback, percentage);
+        else
+            retrieveObjectData(this, this.critical_items, callback);
+};
 
 // Retrieves the user's radicals list.
 // @callback (fn) - callback function.
-var getRadicalsList = function(callback) { retrieveObjectData(this, this.radicals, callback); };
+// @levels (String or Number) - radicals of given level(s)
+var getRadicalsList = function(levels, callback) {
+    if (typeof levels === "function") // no levels, this is the callback
+        retrieveObjectData(this, this.radicals, levels);
+    else
+        if (levelsAreValid(levels))
+            retrieveObjectData(this, this.radicals, callback, levels);
+        else
+            retrieveObjectData(this, this.radicals, callback);
+};
 
 // Retrieves the user's kanji list.
 // @callback (fn) - callback function.
-var getKanjiList = function(callback) { retrieveObjectData(this, this.kanji, callback); };
+// @levels (String or Number) - kanji of given level(s)
+var getKanjiList = function(levels, callback) {
+    if (typeof levels === "function") // no levels, this is the callback
+        retrieveObjectData(this, this.kanji, levels);
+    else
+        if (levelsAreValid(levels))
+            retrieveObjectData(this, this.kanji, callback, levels);
+        else
+            retrieveObjectData(this, this.kanji, callback);
+};
 
 // Retrieves the user's voabulary list.
 // @callback (fn) - callback function.
-var getVocabularyList = function(callback) { retrieveObjectData(this, this.vocabulary, callback); };
+// @levels (String or Number) - vocabulary of given level(s)
+var getVocabularyList = function(levels, callback) {
+    if (typeof levels === "function") // no levels, this is the callback
+        retrieveObjectData(this, this.vocabulary, levels);
+    else
+        if (levelsAreValid(levels))
+            retrieveObjectData(this, this.vocabulary, callback, levels);
+        else
+            retrieveObjectData(this, this.vocabulary, callback);
+};
 
 
 // Constructor for user objects.
