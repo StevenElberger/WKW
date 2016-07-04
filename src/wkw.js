@@ -149,6 +149,7 @@ function retrieveObjectData(user, obj, callback, param) {
     var wk_url = "https://www.wanikani.com/api/user/" + user.key + "/" + obj.apiResourceLoc;
     if (typeof param !== "undefined") { wk_url += "/" + param; }
     $.getJSON(wk_url, function(data) {
+        if (data.error) { callback(data); }
         if (obj.userResourceLoc === "user_information") {
             for (var d in data.user_information)
                 user["user_information"][d] = data.user_information[d];
