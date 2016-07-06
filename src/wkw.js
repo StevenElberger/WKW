@@ -1,7 +1,7 @@
 // WKW - Client Side JS Wrapper for WaniKani API
 
 
-// Prototype object for all other object prototypes.
+// Constructor for all other object prototypes.
 // Contains basic state and functionality (e.g., expiration and emptiness)
 // @time (Number) - the expiration time for this data type
 // @isEmpty (Boolean) - whether or not this object is "empty"
@@ -9,7 +9,7 @@
 // @userResourceLoc (String) - the name of this data type's key in the user object
 // @expiration (Number) - unix timestamp for account creation
 // @isExpired (fn) - returns whether or not this data has expired
-function Proto(expirationTime, apiResourceLoc, userResourceLoc) {
+var Proto = function(expirationTime, apiResourceLoc, userResourceLoc) {
     this.time = expirationTime;
     this.isEmpty = true;
     this.apiResourceLoc = apiResourceLoc;
@@ -144,7 +144,7 @@ function Proto(expirationTime, apiResourceLoc, userResourceLoc) {
 // @obj (object) - the object whose data needs to be retrieved
 // @callback (fn) - the callback function
 // @param (Number) - optional parameter
-function retrieveObjectData(user, obj, callback, param) {
+var retrieveObjectData = function(user, obj, callback, param) {
     if (!isExpiredOrEmpty(obj) && typeof param === "undefined") { callback(); }
     var wk_url = "https://www.wanikani.com/api/user/" + user.key + "/" + obj.apiResourceLoc;
     if (typeof param !== "undefined") { wk_url += "/" + param; }
@@ -165,14 +165,14 @@ function retrieveObjectData(user, obj, callback, param) {
 
 // Checks if an object is expired or empty.
 // @obj (Object) - object to check
-function isExpiredOrEmpty(obj) {
+var isExpiredOrEmpty = function(obj) {
     return obj.isExpired() || obj.isEmpty;
 };
 
 // Checks if given levels are valid for
 // radicals, vocabulary, or kanji lists.
 // @levels (String or Number) - levels requested
-function levelsAreValid(levels) {
+var levelsAreValid = function(levels) {
     if (typeof levels === "number" && levels >= 1 && levels <= 60) {
         return true;
     } else if (typeof levels === "string") {
@@ -187,7 +187,7 @@ function levelsAreValid(levels) {
         return validLevels;
     }
     return false;
-}
+};
 
 // Retrieves the user's information.
 // @callback (fn) - callback function
@@ -272,30 +272,25 @@ var getVocabularyList = function(levels, callback) {
 
 
 // Constructor for user objects.
-// @key (Number) - user's WK API key<F12>
-// @getUserInformation(callback) - retrieves the user's information
-// @getStudyQueue(callback) - retrieves the user's study queue
-function User(api_key) {
-    var resultUser = {
-        key: api_key,
-    };
-    resultUser.user_information = new Proto(21600000, "", "user_information");
-    resultUser.study_queue = new Proto(900000, "study-queue", "study_queue");
-    resultUser.level_progression = new Proto(900000, "level-progression", "level_progression");
-    resultUser.srs_distribution = new Proto(900000, "srs-distribution", "srs_distribution");
-    resultUser.recent_unlocks = new Proto(900000, "recent-unlocks", "recent_unlocks");
-    resultUser.critical_items = new Proto(900000, "critical-items", "critical_items");
-    resultUser.radicals = new Proto(900000, "radicals", "radicals");
-    resultUser.kanji = new Proto(900000, "kanji", "kanji");
-    resultUser.vocabulary = new Proto(900000, "vocabulary", "vocabulary");
-    resultUser.getUserInformation = getUserInformation;
-    resultUser.getStudyQueue = getStudyQueue;
-    resultUser.getLevelProgression = getLevelProgression;
-    resultUser.getSRSDistribution = getSRSDistribution;
-    resultUser.getRecentUnlocksList = getRecentUnlocksList;
-    resultUser.getCriticalItemsList = getCriticalItemsList;
-    resultUser.getRadicalsList = getRadicalsList;
-    resultUser.getKanjiList = getKanjiList;
-    resultUser.getVocabularyList = getVocabularyList;
-    return resultUser;
+// @key (Number) - user's WK API key
+var User = function(api_key) {
+    this.key = api_key,
+    this.user_information = new Proto(21600000, "", "user_information");
+    this.study_queue = new Proto(900000, "study-queue", "study_queue");
+    this.level_progression = new Proto(900000, "level-progression", "level_progression");
+    this.srs_distribution = new Proto(900000, "srs-distribution", "srs_distribution");
+    this.recent_unlocks = new Proto(900000, "recent-unlocks", "recent_unlocks");
+    this.critical_items = new Proto(900000, "critical-items", "critical_items");
+    this.radicals = new Proto(900000, "radicals", "radicals");
+    this.kanji = new Proto(900000, "kanji", "kanji");
+    this.vocabulary = new Proto(900000, "vocabulary", "vocabulary");
 };
+User.prototype.getUserInformation = getUserInformation;
+User.prototype.getStudyQueue = getStudyQueue;
+User.prototype.getLevelProgression = getLevelProgression;
+User.prototype.getSRSDistribution = getSRSDistribution;
+User.prototype.getRecentUnlocksList = getRecentUnlocksList;
+User.prototype.getCriticalItemsList = getCriticalItemsList;
+User.prototype.getRadicalsList = getRadicalsList;
+User.prototype.getKanjiList = getKanjiList;
+User.prototype.getVocabularyList = getVocabularyList;
