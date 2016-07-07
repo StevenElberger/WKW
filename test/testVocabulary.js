@@ -1,7 +1,7 @@
 var assert = chai.assert;
 
 describe('Vocabulary', function() {
-    var testUser = new User('bbf426d6937cbb77d9f908c08d90c3ce');
+    var testUser = WKW.getUser('bbf426d6937cbb77d9f908c08d90c3ce');
     // mock the service
     $.mockjax({
         url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/vocabulary",
@@ -260,7 +260,7 @@ describe('Vocabulary', function() {
     });
 
     describe('Vocabulary By Level', function() {
-        var testUser = new User('bbf426d6937cbb77d9f908c08d90c3ce');
+        var testUser = WKW.getUser('bbf426d6937cbb77d9f908c08d90c3ce');
         // mock the service
         $.mockjax({
             url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/vocabulary/1",
@@ -345,7 +345,7 @@ describe('Vocabulary', function() {
     });
 
     describe('Vocabulary By levels', function() {
-        var testUser = new User('bbf426d6937cbb77d9f908c08d90c3ce');
+        var testUser = WKW.getUser('bbf426d6937cbb77d9f908c08d90c3ce');
         // mock the service
         $.mockjax({
             url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/vocabulary/1,3",
