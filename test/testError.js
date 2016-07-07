@@ -48,11 +48,11 @@ describe('Errors', function() {
         it('should return an error object with invalid_arguments', function(done) {
             // remove error checking and just make a direct call so we can
             // get the error object
-            testUser.getRadicals = function(levels, callback) {
+            testUser.getRadicalList = function(levels, callback) {
                 retrieveObjectData(this, this.radicals, callback, levels);
             };
 
-            testUser.getRadicals(-1, function(error) {
+            testUser.getRadicalList(-1, function(error) {
                 assert.isDefined(error);
                 assert.isNotNull(error);
                 assert.isDefined(error.error);
@@ -84,11 +84,11 @@ describe('Errors', function() {
         it('should return an error object with invalid_arguments', function(done) {
             // remove error checking and just make a direct call so we can
             // get the error object
-            testUser.getKanji = function(levels, callback) {
-                retrieveObjectData(this, this.radicals, callback, levels);
+            testUser.getKanjiList = function(levels, callback) {
+                retrieveObjectData(this, this.kanji, callback, levels);
             };
 
-            testUser.getKanji(-1, function(error) {
+            testUser.getKanjiList(-1, function(error) {
                 assert.isDefined(error);
                 assert.isNotNull(error);
                 assert.isDefined(error.error);
@@ -120,11 +120,11 @@ describe('Errors', function() {
         it('should return an error object with invalid_arguments', function(done) {
             // remove error checking and just make a direct call so we can
             // get the error object
-            testUser.getVocabulary = function(levels, callback) {
-                retrieveObjectData(this, this.radicals, callback, levels);
+            testUser.getVocabularyList = function(levels, callback) {
+                retrieveObjectData(this, this.vocabulary, callback, levels);
             };
 
-            testUser.getVocabulary(-1, function(error) {
+            testUser.getVocabularyList(-1, function(error) {
                 assert.isDefined(error);
                 assert.isNotNull(error);
                 assert.isDefined(error.error);
