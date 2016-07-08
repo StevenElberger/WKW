@@ -1,6 +1,7 @@
 // WKW - Client Side JS Wrapper for WaniKani API
-var WKW = (function() {
-
+var WKW = (function(global) {
+    var debug_mode = false;
+    if (global.wkw_debug) { debug_mode = true; }
     // Constructor for all other object prototypes.
     // Contains basic state and functionality (e.g., expiration and emptiness)
     // @time (Number) - the expiration time for this data type
@@ -148,7 +149,7 @@ var WKW = (function() {
         if (!isExpiredOrEmpty(obj) && typeof param === "undefined") { callback(); }
         var wk_url = "https://www.wanikani.com/api/user/" + user.key + "/" + obj.apiResourceLoc;
         if (typeof param !== "undefined") { wk_url += "/" + param; }
-        $.getJSON(wk_url, function(data) {
+        $.getJSON(wk_url + (debug_mode ? "" : "?callback=?"), function(data) {
             var d;
             if (data.error) {
                 callback(data);
@@ -305,4 +306,4 @@ var WKW = (function() {
         getUser: function(key) { return new User(key); }
     };
 
-}());
+}(this));
