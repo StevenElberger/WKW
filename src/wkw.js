@@ -302,6 +302,36 @@ var WKW = (function(global) {
         }
     };
 
+    // Retrieves all data for the user.
+    // Returns a success status (true if all calls passed w/o errors, false otherwise).
+    // Also returns an array of all error objects, if any.
+    // @callback (fn) - callback function
+    User.prototype.getAllData = function getAllData(callback) {
+        var name,
+            errors = [],
+            success = true,
+            callsFinished = 0,
+            funcNames = ["getUserInformation", "getStudyQueue",
+                        "getLevelProgression", "getSRSDistribution", 
+                        "getRecentUnlocksList", "getCriticalItemsList", 
+                        "getRadicalsList", "getKanjiList", "getVocabularyList"];
+
+        // called at the end of each function that retrieves data
+        var finished = function finished(error) {
+            callsFinished += 1;
+            if (error) {
+                success = false;
+                errors.push(error);
+            }
+            if (callsFinished === funcNames.length) {
+                callback(success, errors);
+            }
+        };
+        for (name in funcNames) {
+            this[funcNames[name]](finished);
+        }
+    };
+
     return {
         getUser: function(key) { return new User(key); }
     };

@@ -1,0 +1,428 @@
+[
+    {
+        "url": "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/",
+        "responseText": {
+            "user_information": {
+                "username": "TestUser",
+                "gravatar": "bbf426d6937cbb77d9f908c08d90c3ce",
+                "level": 30,
+                "title": "Turtles",
+                "about": "",
+                "website": null,
+                "twitter": null,
+                "topics_count": 0,
+                "posts_count": 0,
+                "creation_date": 1388623423,
+                "vacation_date": null
+            },
+            "requested_information": null
+        }
+    },
+    {
+        "url": "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/study-queue",
+        "responseText": {
+            "user_information": {
+                "username": "TestUser",
+                "gravatar": "bbf426d6937cbb77d9f908c08d90c3ce",
+                "level": 30,
+                "title": "Turtles",
+                "about": "",
+                "website": null,
+                "twitter": null,
+                "topics_count": 0,
+                "posts_count": 0,
+                "creation_date": 1388623423,
+                "vacation_date": null
+            },
+            "requested_information": {
+                "lessons_available": 26,
+                "reviews_available": 0,
+                "next_review_date": null,
+                "reviews_available_next_hour": 0,
+                "reviews_available_next_day": 0
+            }
+        }
+    },
+    {
+        "url": "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/level-progression",
+        "responseText": {
+            "user_information": {
+                "username": "TestUser",
+                "gravatar": "bbf426d6937cbb77d9f908c08d90c3ce",
+                "level": 30,
+                "title": "Turtles",
+                "about": "",
+                "website": null,
+                "twitter": null,
+                "topics_count": 0,
+                "posts_count": 0,
+                "creation_date": 1388623423,
+                "vacation_date": null
+            },
+            "requested_information": {
+                "radicals_progress": 0,
+                "radicals_total": 26,
+                "kanji_progress": 0,
+                "kanji_total": 0
+            }
+        }
+    },
+    {
+        "url": "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/srs-distribution",
+        "responseText": {
+            "user_information": {
+                "username": "TestUser",
+                "gravatar": "bbf426d6937cbb77d9f908c08d90c3ce",
+                "level": 30,
+                "title": "Turtles",
+                "about": "",
+                "website": null,
+                "twitter": null,
+                "topics_count": 0,
+                "posts_count": 0,
+                "creation_date": 1388623423,
+                "vacation_date": null
+            },
+            "requested_information": {
+                "apprentice": {
+                  "radicals": 6,
+                  "kanji": 24,
+                  "vocabulary": 108,
+                  "total": 138
+                },
+                "guru": {
+                  "radicals": 15,
+                  "kanji": 98,
+                  "vocabulary": 416,
+                  "total": 529
+                },
+                "master": {
+                  "radicals": 25,
+                  "kanji": 116,
+                  "vocabulary": 464,
+                  "total": 605
+                },
+                "enlighten": {
+                  "radicals": 63,
+                  "kanji": 277,
+                  "vocabulary": 907,
+                  "total": 1247
+                },
+                "burned": {
+                  "radicals": 271,
+                  "kanji": 486,
+                  "vocabulary": 1333,
+                  "total": 2090
+                }
+            }
+        }
+    },
+    {
+        "url": "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/recent-unlocks",
+        "responseText": {
+            "user_information": {
+                "username": "TestUser",
+                "gravatar": "bbf426d6937cbb77d9f908c08d90c3ce",
+                "level": 30,
+                "title": "Turtles",
+                "about": "",
+                "website": null,
+                "twitter": null,
+                "topics_count": 0,
+                "posts_count": 0,
+                "creation_date": 1388623423,
+                "vacation_date": null
+            },
+            "requested_information": [
+                {
+                    "type": "vocabulary",
+                    "character": "懐かしい",
+                    "kana": "なつかしい",
+                    "meaning": "nostalgic, nostalgia",
+                    "level": 30,
+                    "unlocked_date": 1464643035
+                },
+                {
+                    "type": "radical",
+                    "character": "北",
+                    "meaning": "north",
+                    "image": null,
+                    "level": 30,
+                    "unlocked_date": 1464105337
+                },
+                {
+                    "type": "kanji",
+                    "character": "更",
+                    "meaning": "again",
+                    "onyomi": "こう",
+                    "kunyomi": "さら, ふ",
+                    "nanori": null,
+                    "important_reading": "onyomi",
+                    "level": 30,
+                    "unlocked_date": 1464105336
+                }
+            ]
+        }
+    },
+    {
+        "url": "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/critical-items",
+        "responseText": {
+            "user_information": {
+                "username": "TestUser",
+                "gravatar": "bbf426d6937cbb77d9f908c08d90c3ce",
+                "level": 30,
+                "title": "Turtles",
+                "about": "",
+                "website": null,
+                "twitter": null,
+                "topics_count": 0,
+                "posts_count": 0,
+                "creation_date": 1388623423,
+                "vacation_date": null
+            },
+            "requested_information": [
+                {
+                  "type": "radical",
+                  "character": "大",
+                  "meaning": "big",
+                  "image": null,
+                  "level": 1,
+                  "percentage": "83"
+                },
+                {
+                  "type": "vocabulary",
+                  "character": "一つ",
+                  "kana": "ひとつ",
+                  "meaning": "one thing",
+                  "level": 1,
+                  "percentage": "84"
+                },
+                {
+                  "type": "kanji",
+                  "character": "七",
+                  "meaning": "seven",
+                  "onyomi": "しち",
+                  "kunyomi": "なな.*",
+                  "nanori": null,
+                  "important_reading": "onyomi",
+                  "level": 1,
+                  "percentage": "93"
+                }
+            ]
+        }
+    },
+    {
+        "url": "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/radicals",
+        "responseText": {
+            "user_information": {
+                "username": "TestUser",
+                "gravatar": "bbf426d6937cbb77d9f908c08d90c3ce",
+                "level": 30,
+                "title": "Turtles",
+                "about": "",
+                "website": null,
+                "twitter": null,
+                "topics_count": 0,
+                "posts_count": 0,
+                "creation_date": 1388623423,
+                "vacation_date": null
+            },
+            "requested_information": [
+                {
+                  "character": null,
+                  "meaning": "stick",
+                  "image": "https://s3.amazonaws.com/s3.wanikani.com/images/radicals/802e9542627291d4282601ded41ad16ce915f60f.png",
+                  "level": 1,
+                  "user_specific": {
+                    "srs": "burned",
+                    "srs_numeric": 9,
+                    "unlocked_date": 1388623423,
+                    "available_date": 1415811600,
+                    "burned": true,
+                    "burned_date": 1415816017,
+                    "meaning_correct": 8,
+                    "meaning_incorrect": 0,
+                    "meaning_max_streak": 8,
+                    "meaning_current_streak": 8,
+                    "reading_correct": null,
+                    "reading_incorrect": null,
+                    "reading_max_streak": null,
+                    "reading_current_streak": null,
+                    "meaning_note": null,
+                    "user_synonyms": null
+                  }
+                },
+                {
+                  "character": null,
+                  "meaning": "gun",
+                  "image": "https://s3.amazonaws.com/s3.wanikani.com/images/radicals/80fff71b321c8cee57db7224f5fe1daa331128b5.png",
+                  "level": 1,
+                  "user_specific": {
+                    "srs": "burned",
+                    "srs_numeric": 9,
+                    "unlocked_date": 1388623423,
+                    "available_date": 1416249900,
+                    "burned": true,
+                    "burned_date": 1416254179,
+                    "meaning_correct": 8,
+                    "meaning_incorrect": 0,
+                    "meaning_max_streak": 8,
+                    "meaning_current_streak": 8,
+                    "reading_correct": null,
+                    "reading_incorrect": null,
+                    "reading_max_streak": null,
+                    "reading_current_streak": null,
+                    "meaning_note": null,
+                    "user_synonyms": null
+                  }
+                }
+            ]
+        }
+    },
+    {
+        "url": "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/kanji",
+        "responseText": {
+            "user_information": {
+                "username": "TestUser",
+                "gravatar": "bbf426d6937cbb77d9f908c08d90c3ce",
+                "level": 30,
+                "title": "Turtles",
+                "about": "",
+                "website": null,
+                "twitter": null,
+                "topics_count": 0,
+                "posts_count": 0,
+                "creation_date": 1388623423,
+                "vacation_date": null
+            },
+            "requested_information": [
+                {
+                  "character": "口",
+                  "meaning": "mouth",
+                  "onyomi": "こう, く",
+                  "kunyomi": "くち",
+                  "nanori": null,
+                  "important_reading": "onyomi",
+                  "level": 1,
+                  "user_specific": {
+                    "srs": "burned",
+                    "srs_numeric": 9,
+                    "unlocked_date": 1389199901,
+                    "available_date": 1428127200,
+                    "burned": true,
+                    "burned_date": 1428131059,
+                    "meaning_correct": 14,
+                    "meaning_incorrect": 0,
+                    "meaning_max_streak": 14,
+                    "meaning_current_streak": 14,
+                    "reading_correct": 14,
+                    "reading_incorrect": 3,
+                    "reading_max_streak": 7,
+                    "reading_current_streak": 7,
+                    "meaning_note": null,
+                    "user_synonyms": null,
+                    "reading_note": null
+                  }
+                },
+                {
+                  "character": "上",
+                  "meaning": "above, up, over",
+                  "onyomi": "じょう",
+                  "kunyomi": "うえ, あ, のぼ, うわ",
+                  "nanori": null,
+                  "important_reading": "onyomi",
+                  "level": 1,
+                  "user_specific": {
+                    "srs": "burned",
+                    "srs_numeric": 9,
+                    "unlocked_date": 1389199891,
+                    "available_date": 1443235500,
+                    "burned": true,
+                    "burned_date": 1443239479,
+                    "meaning_correct": 25,
+                    "meaning_incorrect": 0,
+                    "meaning_max_streak": 25,
+                    "meaning_current_streak": 25,
+                    "reading_correct": 25,
+                    "reading_incorrect": 8,
+                    "reading_max_streak": 6,
+                    "reading_current_streak": 4,
+                    "meaning_note": null,
+                    "user_synonyms": null,
+                    "reading_note": null
+                  }
+                }
+            ]
+        }
+    },
+    {
+        "url": "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/vocabulary",
+        "responseText": {
+            "user_information": {
+                "username": "TestUser",
+                "gravatar": "bbf426d6937cbb77d9f908c08d90c3ce",
+                "level": 30,
+                "title": "Turtles",
+                "about": "",
+                "website": null,
+                "twitter": null,
+                "topics_count": 0,
+                "posts_count": 0,
+                "creation_date": 1388623423,
+                "vacation_date": null
+            },
+            "requested_information": [
+                {
+                  "character": "二",
+                  "kana": "に",
+                  "meaning": "two",
+                  "level": 1,
+                  "user_specific": {
+                    "srs": "burned",
+                    "srs_numeric": 9,
+                    "unlocked_date": 1389657096,
+                    "available_date": 1428974100,
+                    "burned": true,
+                    "burned_date": 1428977926,
+                    "meaning_correct": 8,
+                    "meaning_incorrect": 0,
+                    "meaning_max_streak": 8,
+                    "meaning_current_streak": 8,
+                    "reading_correct": 8,
+                    "reading_incorrect": 0,
+                    "reading_max_streak": 8,
+                    "reading_current_streak": 8,
+                    "meaning_note": null,
+                    "user_synonyms": null,
+                    "reading_note": null
+                  }
+                },
+                {
+                  "character": "十",
+                  "kana": "じゅう",
+                  "meaning": "ten",
+                  "level": 1,
+                  "user_specific": {
+                    "srs": "burned",
+                    "srs_numeric": 9,
+                    "unlocked_date": 1389657099,
+                    "available_date": 1415812500,
+                    "burned": true,
+                    "burned_date": 1415816187,
+                    "meaning_correct": 8,
+                    "meaning_incorrect": 0,
+                    "meaning_max_streak": 8,
+                    "meaning_current_streak": 8,
+                    "reading_correct": 8,
+                    "reading_incorrect": 0,
+                    "reading_max_streak": 8,
+                    "reading_current_streak": 8,
+                    "meaning_note": null,
+                    "user_synonyms": null,
+                    "reading_note": null
+                  }
+                }
+            ]
+        }
+    }
+]
