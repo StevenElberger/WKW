@@ -5,22 +5,7 @@ describe('UserInformation', function() {
     // mock the service
     $.mockjax({
         url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/",
-        responseText: {
-            "user_information": {
-                "username": "TestUser",
-                "gravatar": "bbf426d6937cbb77d9f908c08d90c3ce",
-                "level": 30,
-                "title": "Turtles",
-                "about": "",
-                "website": null,
-                "twitter": null,
-                "topics_count": 0,
-                "posts_count": 0,
-                "creation_date": 1388623423,
-                "vacation_date": null
-            },
-            "requested_information": null
-        }
+        proxy: "./mocks/userInformation.json"
     });
 
     it('should have a valid username', function(done) {

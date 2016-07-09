@@ -5,71 +5,7 @@ describe('Radicals', function() {
     // mock the service
     $.mockjax({
         url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/radicals",
-        responseText: {
-            "user_information": {
-                "username": "TestUser",
-                "gravatar": "bbf426d6937cbb77d9f908c08d90c3ce",
-                "level": 30,
-                "title": "Turtles",
-                "about": "",
-                "website": null,
-                "twitter": null,
-                "topics_count": 0,
-                "posts_count": 0,
-                "creation_date": 1388623423,
-                "vacation_date": null
-            },
-            "requested_information": [
-                {
-                  "character": null,
-                  "meaning": "stick",
-                  "image": "https://s3.amazonaws.com/s3.wanikani.com/images/radicals/802e9542627291d4282601ded41ad16ce915f60f.png",
-                  "level": 1,
-                  "user_specific": {
-                    "srs": "burned",
-                    "srs_numeric": 9,
-                    "unlocked_date": 1388623423,
-                    "available_date": 1415811600,
-                    "burned": true,
-                    "burned_date": 1415816017,
-                    "meaning_correct": 8,
-                    "meaning_incorrect": 0,
-                    "meaning_max_streak": 8,
-                    "meaning_current_streak": 8,
-                    "reading_correct": null,
-                    "reading_incorrect": null,
-                    "reading_max_streak": null,
-                    "reading_current_streak": null,
-                    "meaning_note": null,
-                    "user_synonyms": null
-                  }
-                },
-                {
-                  "character": null,
-                  "meaning": "gun",
-                  "image": "https://s3.amazonaws.com/s3.wanikani.com/images/radicals/80fff71b321c8cee57db7224f5fe1daa331128b5.png",
-                  "level": 1,
-                  "user_specific": {
-                    "srs": "burned",
-                    "srs_numeric": 9,
-                    "unlocked_date": 1388623423,
-                    "available_date": 1416249900,
-                    "burned": true,
-                    "burned_date": 1416254179,
-                    "meaning_correct": 8,
-                    "meaning_incorrect": 0,
-                    "meaning_max_streak": 8,
-                    "meaning_current_streak": 8,
-                    "reading_correct": null,
-                    "reading_incorrect": null,
-                    "reading_max_streak": null,
-                    "reading_current_streak": null,
-                    "meaning_note": null,
-                    "user_synonyms": null
-                  }
-                }
-            ]
-        }
+        proxy: "./mocks/radicals.json"
     });
 
     it('should have a radicals list', function(done) {
