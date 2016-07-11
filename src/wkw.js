@@ -228,6 +228,8 @@ var WKW = (function(global) {
         return false;
     };
 
+    // Returns a spec object for any given getter method
+    // which should be handed over to retrieveObjectData.
     var getSpecObject = function getSpecObject() {
         var args = Array.prototype.slice.call(arguments),
             // data type is always the last argument
@@ -296,6 +298,7 @@ var WKW = (function(global) {
     };
 
     // Retrieves the user's information.
+    // @force (boolean) - whether or not to force the call to the api
     // @callback (fn) - callback function
     User.prototype.getUserInformation = function getUserInformation(callback) {
         // add type to arguments before getting spec
@@ -305,6 +308,7 @@ var WKW = (function(global) {
     };
 
     // Retrieves the user's study queue.
+    // @force (boolean) - whether or not to force the call to the api
     // @callback (fn) - callback function
     User.prototype.getStudyQueue = function getStudyQueue(callback) {
         // add type to arguments before getting spec
@@ -314,8 +318,9 @@ var WKW = (function(global) {
     };
 
     // Retrieves the user's level progression.
+    // @force (boolean) - whether or not to force the call to the api
     // @callback (fn) - callback function.
-    User.prototype.getLevelProgression = function getLevelProgression(callback) {// retrieveObjectData({"user":this, "obj":this.level_progression, "callback":callback}); };
+    User.prototype.getLevelProgression = function getLevelProgression(callback) {
         // add type to arguments before getting spec
         [].push.call(arguments, "level_progression");
         var spec = getSpecObject.apply(this, arguments);
@@ -323,8 +328,9 @@ var WKW = (function(global) {
     };
 
     // Retrieves the user's SRS distribution.
+    // @force (boolean) - whether or not to force the call to the api
     // @callback (fn) - callback function.
-    User.prototype.getSRSDistribution = function getSRSDistribution(callback) {// retrieveObjectData({"user":this, "obj":this.srs_distribution, "callback":callback}); };
+    User.prototype.getSRSDistribution = function getSRSDistribution(callback) {
         // add type to arguments before getting spec
         [].push.call(arguments, "srs_distribution");
         var spec = getSpecObject.apply(this, arguments);
@@ -341,28 +347,6 @@ var WKW = (function(global) {
         var spec = getSpecObject.apply(this, arguments);
         retrieveObjectData(spec);
     };
-    //     var args = Array.prototype.slice.call(arguments),
-    //         // callback is always the last argument
-    //         callback = args.pop(),
-    //         limit = (args[0] && typeof args[0] === "string") ? args[0] : null,
-    //         force,
-    //         spec;
-    //     if (limit) {
-    //         force = (args[1] && typeof args[1] === "boolean") ? args[1] : null;
-    //     } else {
-    //         force = (args[0] && typeof args[0] === "boolean") ? args[0] : null;
-    //     }
-    //     spec = {
-    //         "user": this,
-    //         "obj": this.recent_unlocks,
-    //         "callback": callback,
-    //         "force": force
-    //     };
-    //     if (numbersAreValid(limit, 1, 100)) {
-    //         spec.param = limit;
-    //     }
-    //     retrieveObjectData(spec);
-    // };
 
     // Retrieves the user's critical items list.
     // @percentage (string) - percentage correct
@@ -374,27 +358,6 @@ var WKW = (function(global) {
         var spec = getSpecObject.apply(this, arguments);
         retrieveObjectData(spec);
     };
-    //     var args = Array.prototype.slice.call(arguments),
-    //         callback = args.pop(),
-    //         percentage = (args[0] && typeof args[0] === "string") ? args[0] : null,
-    //         force,
-    //         spec;
-    //     if (percentage) {
-    //         force = (args[1] && typeof args[1] === "boolean") ? args[1] : null;
-    //     } else {
-    //         force = (args[0] && typeof args[0] === "boolean") ? args[0] : null;
-    //     }
-    //     spec = {
-    //         "user": this,
-    //         "obj": this.critical_items,
-    //         "callback": callback,
-    //         "force": force
-    //     };
-    //     if (numbersAreValid(percentage, 0, 100)) {
-    //         spec.param = percentage;
-    //     }
-    //     retrieveObjectData(spec);
-    // };
 
     // Retrieves the user's radicals list.
     // @levels (string) - radicals of given level(s)
@@ -406,27 +369,6 @@ var WKW = (function(global) {
         var spec = getSpecObject.apply(this, arguments);
         retrieveObjectData(spec);
     };
-    //     var args = Array.prototype.slice.call(arguments),
-    //         callback = args.pop(),
-    //         levels = (args[0] && typeof args[0] === "string") ? args[0] : null,
-    //         force,
-    //         spec;
-    //     if (levels) {
-    //         force = (args[1] && typeof args[1] === "boolean") ? args[1] : null;
-    //     } else {
-    //         force = (args[0] && typeof args[0] === "boolean") ? args[0] : null;
-    //     }
-    //     spec = {
-    //         "user": this,
-    //         "obj": this.radicals,
-    //         "callback": callback,
-    //         "force": force
-    //     };
-    //     if (numbersAreValid(levels, 1, 60)) {
-    //         spec.param = levels;
-    //     }
-    //     retrieveObjectData(spec);
-    // };
 
     // Retrieves the user's kanji list.
     // @levels (string) - kanji of given level(s)
@@ -438,27 +380,6 @@ var WKW = (function(global) {
         var spec = getSpecObject.apply(this, arguments);
         retrieveObjectData(spec);
     };
-    //     var args = Array.prototype.slice.call(arguments),
-    //         callback = args.pop(),
-    //         levels = (args[0] && typeof args[0] === "string") ? args[0] : null,
-    //         force,
-    //         spec;
-    //     if (levels) {
-    //         force = (args[1] && typeof args[1] === "boolean") ? args[1] : null;
-    //     } else {
-    //         force = (args[0] && typeof args[0] === "boolean") ? args[0] : null;
-    //     }
-    //     spec = {
-    //         "user": this,
-    //         "obj": this.kanji,
-    //         "callback": callback,
-    //         "force": force
-    //     };
-    //     if (numbersAreValid(levels, 1, 60)) {
-    //         spec.param = levels;
-    //     }
-    //     retrieveObjectData(spec);
-    // };
 
     // Retrieves the user's voabulary list.
     // @levels (String or Number) - vocabulary of given level(s)
@@ -469,27 +390,6 @@ var WKW = (function(global) {
         var spec = getSpecObject.apply(this, arguments);
         retrieveObjectData(spec);
     };
-    //     var args = Array.prototype.slice.call(arguments),
-    //         callback = args.pop(),
-    //         levels = (args[0] && typeof args[0] === "string") ? args[0] : null,
-    //         force,
-    //         spec;
-    //     if (levels) {
-    //         force = (args[1] && typeof args[1] === "boolean") ? args[1] : null;
-    //     } else {
-    //         force = (args[0] && typeof args[0] === "boolean") ? args[0] : null;
-    //     }
-    //     spec = {
-    //         "user": this,
-    //         "obj": this.vocabulary,
-    //         "callback": callback,
-    //         "force": force
-    //     };
-    //     if (numbersAreValid(levels, 1, 60)) {
-    //         spec.param = levels;
-    //     }
-    //     retrieveObjectData(spec);
-    // };
 
     // Retrieves all data for the user.
     // Returns a success status (true if all calls passed w/o errors, false otherwise).
