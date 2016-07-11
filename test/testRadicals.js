@@ -18,14 +18,14 @@ describe('Radicals', function() {
     });
 
     it('should have radicals with valid characters', function() {
-        testUser.getRecentUnlocksList(function() {
+        testUser.getRadicalsList(function() {
             assert.isDefined(testUser.radicals[0].character);
             assert.isDefined(testUser.radicals[1].character);
         });
     });
 
     it('should have radicals with meanings', function() {
-        testUser.getRecentUnlocksList(function() {
+        testUser.getRadicalsList(function() {
             assert.isDefined(testUser.radicals[0].meaning);
             assert.isDefined(testUser.radicals[1].meaning);
             assert.isNotNull(testUser.radicals[0].meaning);
@@ -38,7 +38,7 @@ describe('Radicals', function() {
     });
 
     it('should have radicals with valid images', function() {
-        testUser.getRecentUnlocksList(function() {
+        testUser.getRadicalsList(function() {
             assert.isDefined(testUser.radicals[0].image);
             assert.isDefined(testUser.radicals[1].image);
             assert.isNotNull(testUser.radicals[0].image);
@@ -51,7 +51,7 @@ describe('Radicals', function() {
     });
 
     it('should have radicals with valid levels', function() {
-        testUser.getRecentUnlocksList(function() {
+        testUser.getRadicalsList(function() {
             assert.isDefined(testUser.radicals[0].level);
             assert.isDefined(testUser.radicals[1].level);
             assert.isNotNull(testUser.radicals[0].level);
@@ -62,7 +62,7 @@ describe('Radicals', function() {
     });
 
     it('should have radicals with user_specific objects', function() {
-        testUser.getRecentUnlocksList(function() {
+        testUser.getRadicalsList(function() {
             assert.isDefined(testUser.radicals[0].user_specific);
             assert.isDefined(testUser.radicals[1].user_specific);
             assert.isNotNull(testUser.radicals[0].user_specific);

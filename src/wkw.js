@@ -140,32 +140,61 @@ var WKW = (function(global) {
     // @user_specific (Object) - user specific information (see user.radicals.user_specific)
 
 
-    // Retrieves data for given object.
+    // Updates rate limiting information
+    // before making a request to the API.
     // @user (object) - the user object
-    // @obj (object) - the object whose data needs to be retrieved
-    // @callback (fn) - the callback function
-    // @param (Number) - optional parameter
-    var retrieveObjectData = function(user, obj, callback, param) {
-        if (!isExpiredOrEmpty(obj) && typeof param === "undefined") { callback(); }
-        var wk_url = "https://www.wanikani.com/api/user/" + user.key + "/" + obj.apiResourceLoc;
-        if (typeof param !== "undefined") { wk_url += "/" + param; }
+    var updateRateLimiting = function updateRateLimiting(user) {
+        if (new Date() - user.first_request_date >= 3600000) { // past an hour, so reset
+            user.first_request_date = new Date();
+            user.num_requests_made = 1;
+        } else {
+            user.num_requests_made += 1;
+        }
+    };
+
+    // Retrieves data for given object.
+    // Takes a spec object with the following
+    // attributes:
+    // @spec (object) - spec object for passing params
+    // --@user (object) - the user object
+    // --@obj (object) - the object whose data needs to be retrieved
+    // --@callback (fn) - the callback function
+    // --@param (number) - optional parameter
+    // --@force (boolean) - optional param to force the api call regardless of rate limiting
+    //var retrieveObjectData = function(user, obj, callback, param) {
+    var retrieveObjectData = function(spec) {
+        // no need to refresh so callback
+        if (!isExpiredOrEmpty(spec.obj) && typeof spec.param === "undefined" && !spec.force) { spec.callback(); }
+        // callback if rate limited
+        if (spec.user.isRateLimited() && !spec.force) {
+            var error = {
+                "error": {
+                    "code": "rate_limited",
+                    "message": "403 Forbidden (Rate Limit Exceeded)"
+                }
+            };
+            spec.callback(error);
+        }
+        updateRateLimiting(spec.user);
+        var wk_url = "https://www.wanikani.com/api/user/" + spec.user.key + "/" + spec.obj.apiResourceLoc;
+        if (typeof spec.param !== "undefined") { wk_url += "/" + spec.param; }   
         $.getJSON(wk_url + (debug_mode ? "" : "?callback=?"), function(data) {
             var d;
             if (data.error) {
-                callback(data);
+                spec.callback(data);
             } else {
-                if (obj.userResourceLoc === "user_information") {
+                if (spec.obj.userResourceLoc === "user_information") {
                     for (d in data.user_information) {
-                        user["user_information"][d] = data.user_information[d];
+                        spec.user["user_information"][d] = data.user_information[d];
                     }
                 } else {
                     for (d in data.requested_information) {
-                        user[obj.userResourceLoc][d] = data.requested_information[d];
+                        spec.user[spec.obj.userResourceLoc][d] = data.requested_information[d];
                     }
                 }
-                obj.isEmpty = false;
-                obj.expiration = new Date();
-                callback();
+                spec.obj.isEmpty = false;
+                spec.obj.expiration = new Date();
+                spec.callback();
             }
         });
     };
@@ -199,11 +228,56 @@ var WKW = (function(global) {
         return false;
     };
 
+    var getSpecObject = function getSpecObject() {
+        var args = Array.prototype.slice.call(arguments),
+            // data type is always the last argument
+            type = args.pop(),
+            // callback is always 2nd to last argument
+            callback = args.pop(),
+            param = (args[0] && typeof args[0] === "string") ? args[0] : null,
+            force,
+            spec;
+        if (param) {
+            force = (args[1] && typeof args[1] === "boolean") ? args[1] : null;
+        } else {
+            force = (args[0] && typeof args[0] === "boolean") ? args[0] : null;
+        }
+        spec = {
+            "user": this,
+            "obj": this[type],
+            "callback": callback,
+            "force": force
+        };
+        // add optional param if valid
+        switch (type) {
+        case "recent_unlocks":
+            if (numbersAreValid(param, 1, 100)) { spec.param = param; }
+            break;
+        case "critical_items":
+            if (numbersAreValid(param, 0, 100)) { spec.param = param; }
+            break;
+        case "radicals":
+            if (numbersAreValid(param, 1, 60)) { spec.param = param; }
+            break;
+        case "kanji":
+            if (numbersAreValid(param, 1, 60)) { spec.param = param; }
+            break;
+        case "vocabulary":
+            if (numbersAreValid(param, 1, 60)) { spec.param = param; }
+            break;
+        default:
+            break;
+        }
+        return spec;
+    };
+
 
     // Constructor for user objects.
     // @key (Number) - user's WK API key
     var User = function(api_key) {
         this.key = api_key,
+        this.first_request_date = 0;
+        this.num_requests_made = 0;
         this.user_information = new Proto(21600000, "", "user_information");
         this.study_queue = new Proto(900000, "study-queue", "study_queue");
         this.level_progression = new Proto(900000, "level-progression", "level_progression");
@@ -215,92 +289,207 @@ var WKW = (function(global) {
         this.vocabulary = new Proto(900000, "vocabulary", "vocabulary");
     };
 
+    // Returns true if the user is rate limited, false otherwise.
+    User.prototype.isRateLimited = function isRateLimited() {
+        if (this.first_request_date === 0) { return false; } // never made a request
+        if (this.num_requests_made >= 100) { return true; } // over the limit
+    };
+
     // Retrieves the user's information.
     // @callback (fn) - callback function
-    User.prototype.getUserInformation = function getUserInformation(callback) { retrieveObjectData(this, this.user_information, callback); };
+    User.prototype.getUserInformation = function getUserInformation(callback) {
+        // add type to arguments before getting spec
+        [].push.call(arguments, "user_information");
+        var spec = getSpecObject.apply(this, arguments);
+        retrieveObjectData(spec);
+    };
 
     // Retrieves the user's study queue.
     // @callback (fn) - callback function
-    User.prototype.getStudyQueue = function getStudyQueue(callback) { retrieveObjectData(this, this.study_queue, callback); };
+    User.prototype.getStudyQueue = function getStudyQueue(callback) {
+        // add type to arguments before getting spec
+        [].push.call(arguments, "study_queue");
+        var spec = getSpecObject.apply(this, arguments);
+        retrieveObjectData(spec);
+    };
 
     // Retrieves the user's level progression.
     // @callback (fn) - callback function.
-    User.prototype.getLevelProgression = function getLevelProgression(callback) { retrieveObjectData(this, this.level_progression, callback); };
+    User.prototype.getLevelProgression = function getLevelProgression(callback) {// retrieveObjectData({"user":this, "obj":this.level_progression, "callback":callback}); };
+        // add type to arguments before getting spec
+        [].push.call(arguments, "level_progression");
+        var spec = getSpecObject.apply(this, arguments);
+        retrieveObjectData(spec);
+    };
 
     // Retrieves the user's SRS distribution.
     // @callback (fn) - callback function.
-    User.prototype.getSRSDistribution = function getSRSDistribution(callback) { retrieveObjectData(this, this.srs_distribution, callback); };
+    User.prototype.getSRSDistribution = function getSRSDistribution(callback) {// retrieveObjectData({"user":this, "obj":this.srs_distribution, "callback":callback}); };
+        // add type to arguments before getting spec
+        [].push.call(arguments, "srs_distribution");
+        var spec = getSpecObject.apply(this, arguments);
+        retrieveObjectData(spec);
+    };
 
     // Retrieves the user's recent unlocks list.
-    // @limit (Number) - limit for number of items returned
+    // @limit (string) - limit for number of items returned
+    // @force (boolean) - whether or not to force the call to the api
     // @callback (fn) - callback function.
     User.prototype.getRecentUnlocksList = function getRecentUnlocksList() {
-        var args = Array.prototype.slice.call(arguments),
-            // callback is always the last argument
-            callback = args.pop(),
-            limit = (args[0] && typeof args[0] === "string") ? args[0] : null;
-        if (numbersAreValid(limit, 1, 100)) {
-            retrieveObjectData(this, this.recent_unlocks, callback, limit);
-        } else {
-            retrieveObjectData(this, this.recent_unlocks, callback);
-        }
+        // add type to arguments before getting spec
+        [].push.call(arguments, "recent_unlocks");
+        var spec = getSpecObject.apply(this, arguments);
+        retrieveObjectData(spec);
     };
+    //     var args = Array.prototype.slice.call(arguments),
+    //         // callback is always the last argument
+    //         callback = args.pop(),
+    //         limit = (args[0] && typeof args[0] === "string") ? args[0] : null,
+    //         force,
+    //         spec;
+    //     if (limit) {
+    //         force = (args[1] && typeof args[1] === "boolean") ? args[1] : null;
+    //     } else {
+    //         force = (args[0] && typeof args[0] === "boolean") ? args[0] : null;
+    //     }
+    //     spec = {
+    //         "user": this,
+    //         "obj": this.recent_unlocks,
+    //         "callback": callback,
+    //         "force": force
+    //     };
+    //     if (numbersAreValid(limit, 1, 100)) {
+    //         spec.param = limit;
+    //     }
+    //     retrieveObjectData(spec);
+    // };
 
     // Retrieves the user's critical items list.
-    // @percentage (Number) - percentage correct
+    // @percentage (string) - percentage correct
+    // @force (boolean) - whether or not to force the call to the api
     // @callback (fn) - callback function.
     User.prototype.getCriticalItemsList = function getCriticalItemsList() {
-        var args = Array.prototype.slice.call(arguments),
-            callback = args.pop(),
-            percentage = (args[0] && typeof args[0] === "string") ? args[0] : null;
-        if (numbersAreValid(percentage, 0, 100)) {
-            retrieveObjectData(this, this.critical_items, callback, percentage);
-        } else {
-            retrieveObjectData(this, this.critical_items, callback);
-        }
+        // add type to arguments before getting spec
+        [].push.call(arguments, "critical_items");
+        var spec = getSpecObject.apply(this, arguments);
+        retrieveObjectData(spec);
     };
+    //     var args = Array.prototype.slice.call(arguments),
+    //         callback = args.pop(),
+    //         percentage = (args[0] && typeof args[0] === "string") ? args[0] : null,
+    //         force,
+    //         spec;
+    //     if (percentage) {
+    //         force = (args[1] && typeof args[1] === "boolean") ? args[1] : null;
+    //     } else {
+    //         force = (args[0] && typeof args[0] === "boolean") ? args[0] : null;
+    //     }
+    //     spec = {
+    //         "user": this,
+    //         "obj": this.critical_items,
+    //         "callback": callback,
+    //         "force": force
+    //     };
+    //     if (numbersAreValid(percentage, 0, 100)) {
+    //         spec.param = percentage;
+    //     }
+    //     retrieveObjectData(spec);
+    // };
 
     // Retrieves the user's radicals list.
-    // @levels (String or Number) - radicals of given level(s)
+    // @levels (string) - radicals of given level(s)
+    // @force (boolean) - whether or not to force the call to the api
     // @callback (fn) - callback function.
     User.prototype.getRadicalsList = function getRadicalsList() {
-        var args = Array.prototype.slice.call(arguments),
-            callback = args.pop(),
-            levels = (args[0] && typeof args[0] === "string") ? args[0] : null;
-        if (numbersAreValid(levels, 1, 60)) {
-            retrieveObjectData(this, this.radicals, callback, levels);
-        } else {
-            retrieveObjectData(this, this.radicals, callback);
-        }
+        // add type to arguments before getting spec
+        [].push.call(arguments, "radicals");
+        var spec = getSpecObject.apply(this, arguments);
+        retrieveObjectData(spec);
     };
+    //     var args = Array.prototype.slice.call(arguments),
+    //         callback = args.pop(),
+    //         levels = (args[0] && typeof args[0] === "string") ? args[0] : null,
+    //         force,
+    //         spec;
+    //     if (levels) {
+    //         force = (args[1] && typeof args[1] === "boolean") ? args[1] : null;
+    //     } else {
+    //         force = (args[0] && typeof args[0] === "boolean") ? args[0] : null;
+    //     }
+    //     spec = {
+    //         "user": this,
+    //         "obj": this.radicals,
+    //         "callback": callback,
+    //         "force": force
+    //     };
+    //     if (numbersAreValid(levels, 1, 60)) {
+    //         spec.param = levels;
+    //     }
+    //     retrieveObjectData(spec);
+    // };
 
     // Retrieves the user's kanji list.
-    // @levels (String or Number) - kanji of given level(s)
+    // @levels (string) - kanji of given level(s)
+    // @force (boolean) - whether or not to force the call to the api
     // @callback (fn) - callback function.
     User.prototype.getKanjiList = function getKanjiList() {
-        var args = Array.prototype.slice.call(arguments),
-            callback = args.pop(),
-            levels = (args[0] && typeof args[0] === "string") ? args[0] : null;
-        if (numbersAreValid(levels, 1, 60)) {
-            retrieveObjectData(this, this.kanji, callback, levels);
-        } else {
-            retrieveObjectData(this, this.kanji, callback);
-        }
+        // add type to arguments before getting spec
+        [].push.call(arguments, "kanji");
+        var spec = getSpecObject.apply(this, arguments);
+        retrieveObjectData(spec);
     };
+    //     var args = Array.prototype.slice.call(arguments),
+    //         callback = args.pop(),
+    //         levels = (args[0] && typeof args[0] === "string") ? args[0] : null,
+    //         force,
+    //         spec;
+    //     if (levels) {
+    //         force = (args[1] && typeof args[1] === "boolean") ? args[1] : null;
+    //     } else {
+    //         force = (args[0] && typeof args[0] === "boolean") ? args[0] : null;
+    //     }
+    //     spec = {
+    //         "user": this,
+    //         "obj": this.kanji,
+    //         "callback": callback,
+    //         "force": force
+    //     };
+    //     if (numbersAreValid(levels, 1, 60)) {
+    //         spec.param = levels;
+    //     }
+    //     retrieveObjectData(spec);
+    // };
 
     // Retrieves the user's voabulary list.
     // @levels (String or Number) - vocabulary of given level(s)
     // @callback (fn) - callback function.
     User.prototype.getVocabularyList = function getVocabularyList() {
-        var args = Array.prototype.slice.call(arguments),
-            callback = args.pop(),
-            levels = (args[0] && typeof args[0] === "string") ? args[0] : null;
-        if (numbersAreValid(levels, 1, 60)) {
-            retrieveObjectData(this, this.vocabulary, callback, levels);
-        } else {
-            retrieveObjectData(this, this.vocabulary, callback);
-        }
+        // add type to arguments before getting spec
+        [].push.call(arguments, "vocabulary");
+        var spec = getSpecObject.apply(this, arguments);
+        retrieveObjectData(spec);
     };
+    //     var args = Array.prototype.slice.call(arguments),
+    //         callback = args.pop(),
+    //         levels = (args[0] && typeof args[0] === "string") ? args[0] : null,
+    //         force,
+    //         spec;
+    //     if (levels) {
+    //         force = (args[1] && typeof args[1] === "boolean") ? args[1] : null;
+    //     } else {
+    //         force = (args[0] && typeof args[0] === "boolean") ? args[0] : null;
+    //     }
+    //     spec = {
+    //         "user": this,
+    //         "obj": this.vocabulary,
+    //         "callback": callback,
+    //         "force": force
+    //     };
+    //     if (numbersAreValid(levels, 1, 60)) {
+    //         spec.param = levels;
+    //     }
+    //     retrieveObjectData(spec);
+    // };
 
     // Retrieves all data for the user.
     // Returns a success status (true if all calls passed w/o errors, false otherwise).
