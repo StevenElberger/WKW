@@ -2,7 +2,7 @@
 var WKW = (function(global) {
     var debug_mode = false;
     if (global.wkw_debug) { debug_mode = true; }
-    // Constructor for all other object prototypes.
+    // Prototype for user's data objects.
     // Contains basic state and functionality (e.g., expiration and emptiness)
     // @time (Number) - the expiration time for this data type
     // @isEmpty (Boolean) - whether or not this object is "empty"
@@ -10,14 +10,25 @@ var WKW = (function(global) {
     // @userResourceLoc (String) - the name of this data type's key in the user object
     // @expiration (Number) - unix timestamp for account creation
     // @isExpired (fn) - returns whether or not this data has expired
-    var Proto = function(expirationTime, apiResourceLoc, userResourceLoc) {
-        this.time = expirationTime;
-        this.isEmpty = true;
-        this.apiResourceLoc = apiResourceLoc;
-        this.userResourceLoc = userResourceLoc;
-        this.expiration = new Date();
+    var proto = {
+        time: 900000,
+        isEmpty: true,
+        apiResourceLoc: "",
+        userResourceLoc: "",
+        expiration: new Date(),
     };
-    Proto.prototype.isExpired = function() { return new Date() - this.expiration > this.time; };
+    proto.prototype.isExpired = function() { return new Date() - this.expiration > this.time; };
+
+    // factory function for proto-based objects
+    // @spec (object) - properties to overwrite in this object's prototype
+    var makeProto = function(spec) {
+        var key, result, protoSpec = {};
+        for (key in spec) {
+            protoSpec[key] = { value: spec[key] };
+        }
+        result = Object.create(proto, protoSpec);
+        return result;
+    };
 
     // User Information Prototype (user.user_information)
     // @username (String) - username
@@ -31,6 +42,28 @@ var WKW = (function(global) {
     // @posts_count (Number) - number of posts made by user
     // @creation_date (Number) - unix timestamp for account creation
     // @vacation_date (Number or null) - unix timestamp for vacation setting
+
+
+    // Performs a deep copy on parent over to child.
+    // Catches objects / arrays.
+    var deepCopy = function(parent, child) {
+        var i,
+            toStr = Object.prototype.toString,
+            astr = "[object Array]";
+
+        child = child || {};
+
+        for (i in parent) {
+            if (parent.hasOwnProperty(i)) {
+                if (typeof parent[i] === "object") {
+                    child[i] = (toStr.call(parent[i]) === astr) ? [] : {};
+                    deepCopy(parent[i], child[i]);
+                } else {
+                    child[i] = parent[i];
+                }
+            }
+        }
+    };
 
 
     // Study Queue Prototype (user.study_queue)
@@ -184,13 +217,15 @@ var WKW = (function(global) {
                 spec.callback(data);
             } else {
                 if (spec.obj.userResourceLoc === "user_information") {
-                    for (d in data.user_information) {
-                        spec.user["user_information"][d] = data.user_information[d];
-                    }
+                    deepCopy(data.user_information, spec.user.user_information);
+                    // for (d in data.user_information) {
+                    //     spec.user["user_information"][d] = data.user_information[d];
+                    // }
                 } else {
-                    for (d in data.requested_information) {
-                        spec.user[spec.obj.userResourceLoc][d] = data.requested_information[d];
-                    }
+                    deepCopy(data.requested_information, spec.user[spec.obj.userResourceLoc]);
+                    // for (d in data.requested_information) {
+                    //     spec.user[spec.obj.userResourceLoc][d] = data.requested_information[d];
+                    // }
                 }
                 spec.obj.isEmpty = false;
                 spec.obj.expiration = new Date();
@@ -273,26 +308,11 @@ var WKW = (function(global) {
         return spec;
     };
 
-
-    // Constructor for user objects.
-    // @key (Number) - user's WK API key
-    var User = function(api_key) {
-        this.key = api_key,
-        this.first_request_date = 0;
-        this.num_requests_made = 0;
-        this.user_information = new Proto(21600000, "", "user_information");
-        this.study_queue = new Proto(900000, "study-queue", "study_queue");
-        this.level_progression = new Proto(900000, "level-progression", "level_progression");
-        this.srs_distribution = new Proto(900000, "srs-distribution", "srs_distribution");
-        this.recent_unlocks = new Proto(900000, "recent-unlocks", "recent_unlocks");
-        this.critical_items = new Proto(900000, "critical-items", "critical_items");
-        this.radicals = new Proto(900000, "radicals", "radicals");
-        this.kanji = new Proto(900000, "kanji", "kanji");
-        this.vocabulary = new Proto(900000, "vocabulary", "vocabulary");
-    };
+    // prototype object for users
+    var user = {};
 
     // Returns true if the user is rate limited, false otherwise.
-    User.prototype.isRateLimited = function isRateLimited() {
+    user.prototype.isRateLimited = function isRateLimited() {
         if (this.first_request_date === 0) { return false; } // never made a request
         if (this.num_requests_made >= 100) { return true; } // over the limit
     };
@@ -300,7 +320,7 @@ var WKW = (function(global) {
     // Retrieves the user's information.
     // @force (boolean) - whether or not to force the call to the api
     // @callback (fn) - callback function
-    User.prototype.getUserInformation = function getUserInformation(callback) {
+    user.prototype.getUserInformation = function getUserInformation(callback) {
         // add type to arguments before getting spec
         [].push.call(arguments, "user_information");
         var spec = getSpecObject.apply(this, arguments);
@@ -310,7 +330,7 @@ var WKW = (function(global) {
     // Retrieves the user's study queue.
     // @force (boolean) - whether or not to force the call to the api
     // @callback (fn) - callback function
-    User.prototype.getStudyQueue = function getStudyQueue(callback) {
+    user.prototype.getStudyQueue = function getStudyQueue(callback) {
         // add type to arguments before getting spec
         [].push.call(arguments, "study_queue");
         var spec = getSpecObject.apply(this, arguments);
@@ -320,7 +340,7 @@ var WKW = (function(global) {
     // Retrieves the user's level progression.
     // @force (boolean) - whether or not to force the call to the api
     // @callback (fn) - callback function.
-    User.prototype.getLevelProgression = function getLevelProgression(callback) {
+    user.prototype.getLevelProgression = function getLevelProgression(callback) {
         // add type to arguments before getting spec
         [].push.call(arguments, "level_progression");
         var spec = getSpecObject.apply(this, arguments);
@@ -330,7 +350,7 @@ var WKW = (function(global) {
     // Retrieves the user's SRS distribution.
     // @force (boolean) - whether or not to force the call to the api
     // @callback (fn) - callback function.
-    User.prototype.getSRSDistribution = function getSRSDistribution(callback) {
+    user.prototype.getSRSDistribution = function getSRSDistribution(callback) {
         // add type to arguments before getting spec
         [].push.call(arguments, "srs_distribution");
         var spec = getSpecObject.apply(this, arguments);
@@ -341,7 +361,7 @@ var WKW = (function(global) {
     // @limit (string) - limit for number of items returned
     // @force (boolean) - whether or not to force the call to the api
     // @callback (fn) - callback function.
-    User.prototype.getRecentUnlocksList = function getRecentUnlocksList() {
+    user.prototype.getRecentUnlocksList = function getRecentUnlocksList() {
         // add type to arguments before getting spec
         [].push.call(arguments, "recent_unlocks");
         var spec = getSpecObject.apply(this, arguments);
@@ -352,7 +372,7 @@ var WKW = (function(global) {
     // @percentage (string) - percentage correct
     // @force (boolean) - whether or not to force the call to the api
     // @callback (fn) - callback function.
-    User.prototype.getCriticalItemsList = function getCriticalItemsList() {
+    user.prototype.getCriticalItemsList = function getCriticalItemsList() {
         // add type to arguments before getting spec
         [].push.call(arguments, "critical_items");
         var spec = getSpecObject.apply(this, arguments);
@@ -363,7 +383,7 @@ var WKW = (function(global) {
     // @levels (string) - radicals of given level(s)
     // @force (boolean) - whether or not to force the call to the api
     // @callback (fn) - callback function.
-    User.prototype.getRadicalsList = function getRadicalsList() {
+    user.prototype.getRadicalsList = function getRadicalsList() {
         // add type to arguments before getting spec
         [].push.call(arguments, "radicals");
         var spec = getSpecObject.apply(this, arguments);
@@ -374,7 +394,7 @@ var WKW = (function(global) {
     // @levels (string) - kanji of given level(s)
     // @force (boolean) - whether or not to force the call to the api
     // @callback (fn) - callback function.
-    User.prototype.getKanjiList = function getKanjiList() {
+    user.prototype.getKanjiList = function getKanjiList() {
         // add type to arguments before getting spec
         [].push.call(arguments, "kanji");
         var spec = getSpecObject.apply(this, arguments);
@@ -383,8 +403,9 @@ var WKW = (function(global) {
 
     // Retrieves the user's voabulary list.
     // @levels (String or Number) - vocabulary of given level(s)
+    // @force (boolean) - whether or not to force the call to the api
     // @callback (fn) - callback function.
-    User.prototype.getVocabularyList = function getVocabularyList() {
+    user.prototype.getVocabularyList = function getVocabularyList() {
         // add type to arguments before getting spec
         [].push.call(arguments, "vocabulary");
         var spec = getSpecObject.apply(this, arguments);
@@ -395,7 +416,7 @@ var WKW = (function(global) {
     // Returns a success status (true if all calls passed w/o errors, false otherwise).
     // Also returns an array of all error objects, if any.
     // @callback (fn) - callback function
-    User.prototype.getAllData = function getAllData(callback) {
+    user.prototype.getAllData = function getAllData(callback) {
         var name,
             errors = [],
             success = true,
@@ -421,8 +442,27 @@ var WKW = (function(global) {
         }
     };
 
+    // Factory for user objects.
+    // @key (Number) - user's WK API key
+    var getUser = function(api_key) {
+        var result = Object.create(user);
+        result.key = api_key;
+        result.first_request_date = 0;
+        result.num_requests_made = 0;
+        result.user_information = makeProto({ apiResourceLoc: "", userResourceLoc: "user_information" });
+        result.study_queue = makeProto({ apiResourceLoc: "study-queue", userResourceLoc: "study_queue" });
+        result.level_progression = makeProto({ apiresourceLoc: "level-progression", userResourceLoc: "level_progression" });
+        result.srs_distribution = makeProto({ apiResourceLoc: "srs-distribution", userResourceLoc: "srs_distribution" });
+        result.recent_unlocks = makeProto({ apiResourceLoc: "recent-unlocks", userResourceLoc: "recent_unlocks" });
+        result.critical_items = makeProto({ apiResourceLoc: "critical-items", userResourceLoc: "critical_items" });
+        result.radicals = makeProto({ apiresourceLoc: "radicals", userResourceLoc: "radicals" });
+        result.kanji = makeProto({ apiResourceLoc: "kanji", userResourceLoc: "kanji" });
+        result.vocabulary = makeProto({ apiResourceLoc: "vocabulary", userResourceLoc: "vocabulary" });
+        return result;
+    };
+
     return {
-        getUser: function(key) { return new User(key); }
+        getUser: getUser
     };
 
 }(this));
