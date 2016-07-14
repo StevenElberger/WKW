@@ -16,17 +16,17 @@ var WKW = (function(global) {
         apiResourceLoc: "",
         userResourceLoc: "",
         expiration: new Date(),
+        isExpired: function() { return new Date() - this.expiration > this.time; }
     };
-    proto.prototype.isExpired = function() { return new Date() - this.expiration > this.time; };
 
     // factory function for proto-based objects
-    // @spec (object) - properties to overwrite in this object's prototype
-    var makeProto = function(spec) {
-        var key, result, protoSpec = {};
-        for (key in spec) {
-            protoSpec[key] = { value: spec[key] };
+    // @overrides (object) - properties to overwrite in this object's prototype
+    var makeProto = function(overrides) {
+        var key, result, spec = {};
+        for (key in overrides) {
+            spec[key] = { value: overrides[key] };
         }
-        result = Object.create(proto, protoSpec);
+        result = Object.create(proto, spec);
         return result;
     };
 
@@ -42,29 +42,10 @@ var WKW = (function(global) {
     // @posts_count (Number) - number of posts made by user
     // @creation_date (Number) - unix timestamp for account creation
     // @vacation_date (Number or null) - unix timestamp for vacation setting
-
-
-    // Performs a deep copy on parent over to child.
-    // Catches objects / arrays.
-    var deepCopy = function(parent, child) {
-        var i,
-            toStr = Object.prototype.toString,
-            astr = "[object Array]";
-
-        child = child || {};
-
-        for (i in parent) {
-            if (parent.hasOwnProperty(i)) {
-                if (typeof parent[i] === "object") {
-                    child[i] = (toStr.call(parent[i]) === astr) ? [] : {};
-                    deepCopy(parent[i], child[i]);
-                } else {
-                    child[i] = parent[i];
-                }
-            }
-        }
+    var userInformationProto = makeProto({ apiResourceLoc: "", userResourceLoc: "user_information" });
+    userInformationProto.getAvatar = function() {
+        return "https://gravatar.com/avatar/" + this.gravatar;
     };
-
 
     // Study Queue Prototype (user.study_queue)
     // @lessons_available (Number) - number of lessons currently available
@@ -72,14 +53,14 @@ var WKW = (function(global) {
     // @next_review_date (Number or null) - unix timestamp for next review (or null if vacation mode)
     // @reviews_available_next_hour (Number) - number of reviews available within the next hour
     // @reviews_available_next_day (Number) - number of reviews available within the next day
-
+    var studyQueueProto = makeProto({ apiResourceLoc: "study-queue", userResourceLoc: "study_queue" });
 
     // Level Progression Prototype (user.level_progression)
     // @radicals_progress (Number) - number of radicals completed for the current level
     // @radicals_total (Number) - total number of radicals for this level
     // @kanji_progress (Number) - number of kanji completed for the current level
     // @kanji_total (Number) - total number of kanji for this level
-
+    var levelProgressionProto = makeProto({ apiResourceLoc: "level-progression", userResourceLoc: "level_progression" });
 
     // SRS Distribution Prototype (user.srs_distribution)
     // @apprentice (Object) - items at apprentice level
@@ -91,7 +72,7 @@ var WKW = (function(global) {
     // @master (Object) - items at master level (same structure as apprentice)
     // @enlighten (Object) - items at enlighten level (same structure as apprentice)
     // @burned (Object) - items at burned level (same structure as apprentice)
-
+    var srsDistributionProto = makeProto({ apiResourceLoc: "srs-distribution", userResourceLoc: "srs_distribution" });
 
     // Recent Unlocks List Prototype (user.recent_unlocks)
     // 3 different types of objects in here
@@ -110,7 +91,7 @@ var WKW = (function(global) {
     // @kunyomi (String) - the kun'yomi reading for this kanji
     // @nanori (String or null) - the nanori reading for this kanji
     // @important_reading (String) - which reading is important (onyomi, kunyomi, or nanori)
-
+    var recentUnlocksProto = makeProto({ apiResourceLoc: "recent-unlocks", userResourceLoc: "recent_unlocks" });
 
     // Critical Items List Prototype (user.critical_items)
     // 3 different types of objects in here
@@ -129,7 +110,7 @@ var WKW = (function(global) {
     // @kunyomi (String) - the kun'yomi reading for this kanji
     // @nanori (String or null) - the nanori reading for this kanji
     // @important_reading (String) - which reading is important (onyomi, kunyomi, or nanori)
-
+    var criticalItemsProto = critical_items = makeProto({ apiResourceLoc: "critical-items", userResourceLoc: "critical_items" });
 
     // Radicals List Prototype (user.radicals)
     // @character (String or null) - the character for this radical
@@ -153,6 +134,7 @@ var WKW = (function(global) {
     // -- @reading_current_streak (Number or null) - current number of times meaning was answered correctly consecutively
     // -- @meaning_note (String or null) - user-created notes for meaning
     // -- @user_synonyms (Array or null) - user-created synonyms for this item
+    var radicalsProto = radicals = makeProto({ apiResourceLoc: "radicals", userResourceLoc: "radicals" });
 
     // Kanji List Prototype (user.kanji)
     // @character (String) - character for this kanji
@@ -163,7 +145,7 @@ var WKW = (function(global) {
     // @important_reading (String) - which reading is important (onyomi, kunyomi, or nanori)
     // @level (Number) - level at which this kanji was unlocked
     // @user_specific (Object) - user specific information (see user.radicals.user_specific)
-
+    var kanjiProto = kanji = makeProto({ apiResourceLoc: "kanji", userResourceLoc: "kanji" });
 
     // Vocabulary List Prototype (user.vocabulary)
     // @character (String) - character for this word
@@ -171,7 +153,29 @@ var WKW = (function(global) {
     // @meaning (String) - meaning(s) of this word
     // @level (Number) - level at which this item was unlocked
     // @user_specific (Object) - user specific information (see user.radicals.user_specific)
+    var vocabularyProto = vocabulary = makeProto({ apiResourceLoc: "vocabulary", userResourceLoc: "vocabulary" });
 
+
+    // Performs a deep copy on parent over to child.
+    // Catches objects / arrays.
+    var deepCopy = function(parent, child) {
+        var i,
+            toStr = Object.prototype.toString,
+            astr = "[object Array]";
+
+        child = child || {};
+
+        for (i in parent) {
+            if (parent.hasOwnProperty(i)) {
+                if (typeof parent[i] === "object") {
+                    child[i] = (toStr.call(parent[i]) === astr) ? [] : {};
+                    deepCopy(parent[i], child[i]);
+                } else {
+                    child[i] = parent[i];
+                }
+            }
+        }
+    };
 
     // Updates rate limiting information
     // before making a request to the API.
@@ -218,14 +222,8 @@ var WKW = (function(global) {
             } else {
                 if (spec.obj.userResourceLoc === "user_information") {
                     deepCopy(data.user_information, spec.user.user_information);
-                    // for (d in data.user_information) {
-                    //     spec.user["user_information"][d] = data.user_information[d];
-                    // }
                 } else {
                     deepCopy(data.requested_information, spec.user[spec.obj.userResourceLoc]);
-                    // for (d in data.requested_information) {
-                    //     spec.user[spec.obj.userResourceLoc][d] = data.requested_information[d];
-                    // }
                 }
                 spec.obj.isEmpty = false;
                 spec.obj.expiration = new Date();
@@ -309,138 +307,139 @@ var WKW = (function(global) {
     };
 
     // prototype object for users
-    var user = {};
+    var user = {
+        // Returns true if the user is rate limited, false otherwise.
+        isRateLimited: function isRateLimited() {
+            if (this.first_request_date === 0) { return false; } // never made a request
+            if (this.num_requests_made >= 100) { return true; } // over the limit
+        },
 
-    // Returns true if the user is rate limited, false otherwise.
-    user.prototype.isRateLimited = function isRateLimited() {
-        if (this.first_request_date === 0) { return false; } // never made a request
-        if (this.num_requests_made >= 100) { return true; } // over the limit
-    };
+        // Retrieves the user's information.
+        // @force (boolean) - whether or not to force the call to the api
+        // @callback (fn) - callback function
+        getUserInformation: function getUserInformation(callback) {
+            // add type to arguments before getting spec
+            [].push.call(arguments, "user_information");
+            var spec = getSpecObject.apply(this, arguments);
+            retrieveObjectData(spec);
+        },
 
-    // Retrieves the user's information.
-    // @force (boolean) - whether or not to force the call to the api
-    // @callback (fn) - callback function
-    user.prototype.getUserInformation = function getUserInformation(callback) {
-        // add type to arguments before getting spec
-        [].push.call(arguments, "user_information");
-        var spec = getSpecObject.apply(this, arguments);
-        retrieveObjectData(spec);
-    };
+        // Retrieves the user's study queue.
+        // @force (boolean) - whether or not to force the call to the api
+        // @callback (fn) - callback function
+        getStudyQueue: function getStudyQueue(callback) {
+            // add type to arguments before getting spec
+            [].push.call(arguments, "study_queue");
+            var spec = getSpecObject.apply(this, arguments);
+            retrieveObjectData(spec);
+        },
 
-    // Retrieves the user's study queue.
-    // @force (boolean) - whether or not to force the call to the api
-    // @callback (fn) - callback function
-    user.prototype.getStudyQueue = function getStudyQueue(callback) {
-        // add type to arguments before getting spec
-        [].push.call(arguments, "study_queue");
-        var spec = getSpecObject.apply(this, arguments);
-        retrieveObjectData(spec);
-    };
+        // Retrieves the user's level progression.
+        // @force (boolean) - whether or not to force the call to the api
+        // @callback (fn) - callback function.
+        getLevelProgression: function getLevelProgression(callback) {
+            // add type to arguments before getting spec
+            [].push.call(arguments, "level_progression");
+            var spec = getSpecObject.apply(this, arguments);
+            retrieveObjectData(spec);
+        },
 
-    // Retrieves the user's level progression.
-    // @force (boolean) - whether or not to force the call to the api
-    // @callback (fn) - callback function.
-    user.prototype.getLevelProgression = function getLevelProgression(callback) {
-        // add type to arguments before getting spec
-        [].push.call(arguments, "level_progression");
-        var spec = getSpecObject.apply(this, arguments);
-        retrieveObjectData(spec);
-    };
+        // Retrieves the user's SRS distribution.
+        // @force (boolean) - whether or not to force the call to the api
+        // @callback (fn) - callback function.
+        getSRSDistribution: function getSRSDistribution(callback) {
+            // add type to arguments before getting spec
+            [].push.call(arguments, "srs_distribution");
+            var spec = getSpecObject.apply(this, arguments);
+            retrieveObjectData(spec);
+        },
 
-    // Retrieves the user's SRS distribution.
-    // @force (boolean) - whether or not to force the call to the api
-    // @callback (fn) - callback function.
-    user.prototype.getSRSDistribution = function getSRSDistribution(callback) {
-        // add type to arguments before getting spec
-        [].push.call(arguments, "srs_distribution");
-        var spec = getSpecObject.apply(this, arguments);
-        retrieveObjectData(spec);
-    };
+        // Retrieves the user's recent unlocks list.
+        // @limit (string) - limit for number of items returned
+        // @force (boolean) - whether or not to force the call to the api
+        // @callback (fn) - callback function.
+        getRecentUnlocksList: function getRecentUnlocksList() {
+            // add type to arguments before getting spec
+            [].push.call(arguments, "recent_unlocks");
+            var spec = getSpecObject.apply(this, arguments);
+            retrieveObjectData(spec);
+        },
 
-    // Retrieves the user's recent unlocks list.
-    // @limit (string) - limit for number of items returned
-    // @force (boolean) - whether or not to force the call to the api
-    // @callback (fn) - callback function.
-    user.prototype.getRecentUnlocksList = function getRecentUnlocksList() {
-        // add type to arguments before getting spec
-        [].push.call(arguments, "recent_unlocks");
-        var spec = getSpecObject.apply(this, arguments);
-        retrieveObjectData(spec);
-    };
+        // Retrieves the user's critical items list.
+        // @percentage (string) - percentage correct
+        // @force (boolean) - whether or not to force the call to the api
+        // @callback (fn) - callback function.
+        getCriticalItemsList: function getCriticalItemsList() {
+            // add type to arguments before getting spec
+            [].push.call(arguments, "critical_items");
+            var spec = getSpecObject.apply(this, arguments);
+            retrieveObjectData(spec);
+        },
 
-    // Retrieves the user's critical items list.
-    // @percentage (string) - percentage correct
-    // @force (boolean) - whether or not to force the call to the api
-    // @callback (fn) - callback function.
-    user.prototype.getCriticalItemsList = function getCriticalItemsList() {
-        // add type to arguments before getting spec
-        [].push.call(arguments, "critical_items");
-        var spec = getSpecObject.apply(this, arguments);
-        retrieveObjectData(spec);
-    };
+        // Retrieves the user's radicals list.
+        // @levels (string) - radicals of given level(s)
+        // @force (boolean) - whether or not to force the call to the api
+        // @callback (fn) - callback function.
+        getRadicalsList: function getRadicalsList() {
+            // add type to arguments before getting spec
+            [].push.call(arguments, "radicals");
+            var spec = getSpecObject.apply(this, arguments);
+            retrieveObjectData(spec);
+        },
 
-    // Retrieves the user's radicals list.
-    // @levels (string) - radicals of given level(s)
-    // @force (boolean) - whether or not to force the call to the api
-    // @callback (fn) - callback function.
-    user.prototype.getRadicalsList = function getRadicalsList() {
-        // add type to arguments before getting spec
-        [].push.call(arguments, "radicals");
-        var spec = getSpecObject.apply(this, arguments);
-        retrieveObjectData(spec);
-    };
+        // Retrieves the user's kanji list.
+        // @levels (string) - kanji of given level(s)
+        // @force (boolean) - whether or not to force the call to the api
+        // @callback (fn) - callback function.
+        getKanjiList: function getKanjiList() {
+            // add type to arguments before getting spec
+            [].push.call(arguments, "kanji");
+            var spec = getSpecObject.apply(this, arguments);
+            retrieveObjectData(spec);
+        },
 
-    // Retrieves the user's kanji list.
-    // @levels (string) - kanji of given level(s)
-    // @force (boolean) - whether or not to force the call to the api
-    // @callback (fn) - callback function.
-    user.prototype.getKanjiList = function getKanjiList() {
-        // add type to arguments before getting spec
-        [].push.call(arguments, "kanji");
-        var spec = getSpecObject.apply(this, arguments);
-        retrieveObjectData(spec);
-    };
+        // Retrieves the user's voabulary list.
+        // @levels (String or Number) - vocabulary of given level(s)
+        // @force (boolean) - whether or not to force the call to the api
+        // @callback (fn) - callback function.
+        getVocabularyList: function getVocabularyList() {
+            // add type to arguments before getting spec
+            [].push.call(arguments, "vocabulary");
+            var spec = getSpecObject.apply(this, arguments);
+            retrieveObjectData(spec);
+        },
 
-    // Retrieves the user's voabulary list.
-    // @levels (String or Number) - vocabulary of given level(s)
-    // @force (boolean) - whether or not to force the call to the api
-    // @callback (fn) - callback function.
-    user.prototype.getVocabularyList = function getVocabularyList() {
-        // add type to arguments before getting spec
-        [].push.call(arguments, "vocabulary");
-        var spec = getSpecObject.apply(this, arguments);
-        retrieveObjectData(spec);
-    };
+        // Retrieves all data for the user.
+        // Returns a success status (true if all calls passed w/o errors, false otherwise).
+        // Also returns an array of all error objects, if any.
+        // @callback (fn) - callback function
+        getAllData: function getAllData(callback) {
+            var name,
+                errors = [],
+                success = true,
+                callsFinished = 0,
+                funcNames = ["getUserInformation", "getStudyQueue",
+                            "getLevelProgression", "getSRSDistribution", 
+                            "getRecentUnlocksList", "getCriticalItemsList", 
+                            "getRadicalsList", "getKanjiList", "getVocabularyList"];
 
-    // Retrieves all data for the user.
-    // Returns a success status (true if all calls passed w/o errors, false otherwise).
-    // Also returns an array of all error objects, if any.
-    // @callback (fn) - callback function
-    user.prototype.getAllData = function getAllData(callback) {
-        var name,
-            errors = [],
-            success = true,
-            callsFinished = 0,
-            funcNames = ["getUserInformation", "getStudyQueue",
-                        "getLevelProgression", "getSRSDistribution", 
-                        "getRecentUnlocksList", "getCriticalItemsList", 
-                        "getRadicalsList", "getKanjiList", "getVocabularyList"];
-
-        // called at the end of each function that retrieves data
-        var finished = function finished(error) {
-            callsFinished += 1;
-            if (error) {
-                success = false;
-                errors.push(error);
+            // called at the end of each function that retrieves data
+            var finished = function finished(error) {
+                callsFinished += 1;
+                if (error) {
+                    success = false;
+                    errors.push(error);
+                }
+                if (callsFinished === funcNames.length) {
+                    callback(success, errors);
+                }
+            };
+            for (name in funcNames) {
+                this[funcNames[name]](finished);
             }
-            if (callsFinished === funcNames.length) {
-                callback(success, errors);
-            }
-        };
-        for (name in funcNames) {
-            this[funcNames[name]](finished);
         }
     };
+
 
     // Factory for user objects.
     // @key (Number) - user's WK API key
@@ -449,15 +448,15 @@ var WKW = (function(global) {
         result.key = api_key;
         result.first_request_date = 0;
         result.num_requests_made = 0;
-        result.user_information = makeProto({ apiResourceLoc: "", userResourceLoc: "user_information" });
-        result.study_queue = makeProto({ apiResourceLoc: "study-queue", userResourceLoc: "study_queue" });
-        result.level_progression = makeProto({ apiresourceLoc: "level-progression", userResourceLoc: "level_progression" });
-        result.srs_distribution = makeProto({ apiResourceLoc: "srs-distribution", userResourceLoc: "srs_distribution" });
-        result.recent_unlocks = makeProto({ apiResourceLoc: "recent-unlocks", userResourceLoc: "recent_unlocks" });
-        result.critical_items = makeProto({ apiResourceLoc: "critical-items", userResourceLoc: "critical_items" });
-        result.radicals = makeProto({ apiresourceLoc: "radicals", userResourceLoc: "radicals" });
-        result.kanji = makeProto({ apiResourceLoc: "kanji", userResourceLoc: "kanji" });
-        result.vocabulary = makeProto({ apiResourceLoc: "vocabulary", userResourceLoc: "vocabulary" });
+        result.user_information = Object.create(userInformationProto);
+        result.study_queue = Object.create(studyQueueProto);
+        result.level_progression = Object.create(levelProgressionProto);
+        result.srs_distribution = Object.create(srsDistributionProto);
+        result.recent_unlocks = Object.create(recentUnlocksProto);
+        result.critical_items = Object.create(criticalItemsProto);
+        result.radicals = Object.create(radicalsProto);
+        result.kanji = Object.create(kanjiProto);
+        result.vocabulary = Object.create(vocabularyProto);
         return result;
     };
 
