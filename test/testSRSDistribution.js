@@ -21,7 +21,7 @@ describe('SRSDistribution', function() {
     });
 
     it('should have a valid number of items for apprentice level', function() {
-        testUser.getStudyQueue(function() {
+        testUser.getSRSDistribution(function() {
             assert.isNotNull(testUser.srs_distribution.apprentice.radicals);
             assert.isNotNull(testUser.srs_distribution.apprentice.kanji);
             assert.isNotNull(testUser.srs_distribution.apprentice.vocabulary);
@@ -38,7 +38,7 @@ describe('SRSDistribution', function() {
     });
 
     it('should have a valid number of items for guru level', function() {
-        testUser.getStudyQueue(function() {
+        testUser.getSRSDistribution(function() {
             assert.isNotNull(testUser.srs_distribution.guru.radicals);
             assert.isNotNull(testUser.srs_distribution.guru.kanji);
             assert.isNotNull(testUser.srs_distribution.guru.vocabulary);
@@ -55,7 +55,7 @@ describe('SRSDistribution', function() {
     });
 
     it('should have a valid number of items for master level', function() {
-        testUser.getStudyQueue(function() {
+        testUser.getSRSDistribution(function() {
             assert.isNotNull(testUser.srs_distribution.master.radicals);
             assert.isNotNull(testUser.srs_distribution.master.kanji);
             assert.isNotNull(testUser.srs_distribution.master.vocabulary);
@@ -72,7 +72,7 @@ describe('SRSDistribution', function() {
     });
 
     it('should have a valid number of items for enlighten level', function() {
-        testUser.getStudyQueue(function() {
+        testUser.getSRSDistribution(function() {
             assert.isNotNull(testUser.srs_distribution.enlighten.radicals);
             assert.isNotNull(testUser.srs_distribution.enlighten.kanji);
             assert.isNotNull(testUser.srs_distribution.enlighten.vocabulary);
@@ -89,7 +89,7 @@ describe('SRSDistribution', function() {
     });
 
     it('should have a valid number of items for burned level', function() {
-        testUser.getStudyQueue(function() {
+        testUser.getSRSDistribution(function() {
             assert.isNotNull(testUser.srs_distribution.burned.radicals);
             assert.isNotNull(testUser.srs_distribution.burned.kanji);
             assert.isNotNull(testUser.srs_distribution.burned.vocabulary);
@@ -102,6 +102,15 @@ describe('SRSDistribution', function() {
             assert.isAtLeast(testUser.srs_distribution.burned.vocabulary,0);
             assert.isNumber(testUser.srs_distribution.burned.total);
             assert.isAtLeast(testUser.srs_distribution.burned.total,0);
+        });
+    });
+
+    it('should provide sums of each type of object', function() {
+        testUser.getSRSDistribution(function() {
+            assert.equal(testUser.srs_distribution.totalRadicals(), 380);
+            assert.equal(testUser.srs_distribution.totalKanji(), 1001);
+            assert.equal(testUser.srs_distribution.totalVocabulary(), 3228);
+            assert.equal(testUser.srs_distribution.totalItems(), 4609);
         });
     });
 });

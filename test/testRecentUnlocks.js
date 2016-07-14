@@ -106,4 +106,57 @@ describe('RecentUnlocksList', function() {
             assert.isString(testUser.recent_unlocks[2].important_reading);
        });
     });
+
+    it('should allow retrieval specified by type', function() {
+        testUser.getRecentUnlocksList(function() {
+            var radArray = testUser.recent_unlocks.getRadicals(),
+                kanjiArray = testUser.recent_unlocks.getKanji(),
+                vocabArray = testUser.recent_unlocks.getVocabulary();
+            assert.isNotNull(radArray);
+            assert.equal(radArray.length, 1);
+            assert.equal(radArray[0].type, "radical");
+            assert.isNotNull(kanjiArray);
+            assert.equal(kanjiArray.length, 1);
+            assert.equal(kanjiArray[0].type, "kanji");
+            assert.isNotNull(vocabArray);
+            assert.equal(vocabArray.length, 1);
+            assert.equal(vocabArray[0].type, "vocabulary");
+        });
+    });
+
+    it('should allow retrieval specified by character', function() {
+        testUser.getRecentUnlocksList(function() {
+            var resultArray = testUser.recent_unlocks.getByCharacter("北");
+            assert.isNotNull(resultArray);
+            assert.equal(resultArray.length, 1);
+            assert.equal(resultArray[0].character, "北");
+        });
+    });
+
+    it('should allow retrieval specified by meaning', function() {
+        testUser.getRecentUnlocksList(function() {
+            var resultArray = testUser.recent_unlocks.getByMeaning("again");
+            assert.isNotNull(resultArray);
+            assert.equal(resultArray.length, 1);
+            assert.equal(resultArray[0].meaning, "again");
+        });
+    });
+
+    it('should allow retrieval specified by level', function() {
+        testUser.getRecentUnlocksList(function() {
+            var resultArray = testUser.recent_unlocks.getByLevel(30);
+            assert.isNotNull(resultArray);
+            assert.equal(resultArray.length, 3);
+            assert.equal(resultArray[2].level, 30);
+        });
+    });
+
+    it('should allow retrieval specified by unlocked date', function() {
+        testUser.getRecentUnlocksList(function() {
+            var resultArray = testUser.recent_unlocks.getByUnlockedDate(1464105337);
+            assert.isNotNull(resultArray);
+            assert.equal(resultArray.length, 1);
+            assert.equal(resultArray[0].unlocked_date, 1464105337);
+        });
+    });
 });
