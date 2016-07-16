@@ -9,7 +9,7 @@ describe('Radicals', function() {
     });
 
     it('should have a radicals list', function(done) {
-        testUser.getRadicalsList(function() {
+        testUser.getRadicalsList().then(function() {
             assert.isNotNull(testUser.radicals);
             assert.isNotNull(testUser.radicals[0]);
             assert.isNotNull(testUser.radicals[1]);
@@ -18,14 +18,14 @@ describe('Radicals', function() {
     });
 
     it('should have radicals with valid characters', function() {
-        testUser.getRadicalsList(function() {
+        testUser.getRadicalsList().then(function() {
             assert.isDefined(testUser.radicals[0].character);
             assert.isDefined(testUser.radicals[1].character);
         });
     });
 
     it('should have radicals with meanings', function() {
-        testUser.getRadicalsList(function() {
+        testUser.getRadicalsList().then(function() {
             assert.isDefined(testUser.radicals[0].meaning);
             assert.isDefined(testUser.radicals[1].meaning);
             assert.isNotNull(testUser.radicals[0].meaning);
@@ -38,7 +38,7 @@ describe('Radicals', function() {
     });
 
     it('should have radicals with valid images', function() {
-        testUser.getRadicalsList(function() {
+        testUser.getRadicalsList().then(function() {
             assert.isDefined(testUser.radicals[0].image);
             assert.isDefined(testUser.radicals[1].image);
             assert.isNotNull(testUser.radicals[0].image);
@@ -51,7 +51,7 @@ describe('Radicals', function() {
     });
 
     it('should have radicals with valid levels', function() {
-        testUser.getRadicalsList(function() {
+        testUser.getRadicalsList().then(function() {
             assert.isDefined(testUser.radicals[0].level);
             assert.isDefined(testUser.radicals[1].level);
             assert.isNotNull(testUser.radicals[0].level);
@@ -62,7 +62,7 @@ describe('Radicals', function() {
     });
 
     it('should have radicals with user_specific objects', function() {
-        testUser.getRadicalsList(function() {
+        testUser.getRadicalsList().then(function() {
             assert.isDefined(testUser.radicals[0].user_specific);
             assert.isDefined(testUser.radicals[1].user_specific);
             assert.isNotNull(testUser.radicals[0].user_specific);
@@ -71,7 +71,7 @@ describe('Radicals', function() {
     });
 
     it('should allow retrieval specified by character', function() {
-        testUser.getRadicalsList(function() {
+        testUser.getRadicalsList().then(function() {
             var resultArray = testUser.radicals.getByCharacter("大");
             assert.isNotNull(resultArray);
             assert.equal(resultArray.length, 1);
@@ -80,7 +80,7 @@ describe('Radicals', function() {
     });
 
     it('should allow retrieval specified by meaning', function() {
-        testUser.getRadicalsList(function() {
+        testUser.getRadicalsList().then(function() {
             var resultArray = testUser.radicals.getByMeaning("stick");
             assert.isNotNull(resultArray);
             assert.equal(resultArray.length, 1);
@@ -89,7 +89,7 @@ describe('Radicals', function() {
     });
 
     it('should allow retrieval specified by image', function() {
-        testUser.getRadicalsList(function() {
+        testUser.getRadicalsList().then(function() {
             var imageURL = "https://s3.amazonaws.com/s3.wanikani.com/images/radicals/802e9542627291d4282601ded41ad16ce915f60f.png",
                 resultArray = testUser.radicals.getByImage(imageURL);
             assert.isNotNull(resultArray);
@@ -99,7 +99,7 @@ describe('Radicals', function() {
     });
 
     it('should allow retrieval specified by level', function() {
-        testUser.getRadicalsList(function() {
+        testUser.getRadicalsList().then(function() {
             var resultArray = testUser.radicals.getByLevel(1);
             assert.isNotNull(resultArray);
             assert.equal(resultArray.length, 2);
@@ -110,7 +110,7 @@ describe('Radicals', function() {
     describe('user_specific objects', function() {
 
         it('should have a valid srs property', function() {
-            testUser.getRadicalsList(function() {
+            testUser.getRadicalsList().then(function() {
                 assert.isDefined(testUser.radicals[0].user_specific.srs);
                 assert.isDefined(testUser.radicals[1].user_specific.srs);
                 assert.isNotNull(testUser.radicals[0].user_specific.srs);
@@ -241,7 +241,7 @@ describe('Radicals', function() {
         });
 
         it('should be able to take a single digit parameter', function(done) {
-            testUser.getRadicalsList(1, function() {
+            testUser.getRadicalsList(1).then(function() {
                 assert.isDefined(testUser.radicals);
                 assert.isNotNull(testUser.radicals);
                 assert.isNotNull(testUser.radicals[0]);
@@ -260,7 +260,7 @@ describe('Radicals', function() {
         });
 
         it('should be able to take a comma separated string of parameters', function(done) {
-            testUser.getRadicalsList("1,3", function() {
+            testUser.getRadicalsList("1,3").then(function() {
                 assert.isDefined(testUser.radicals);
                 assert.isNotNull(testUser.radicals);
                 assert.equal(testUser.radicals[3].level, 3);

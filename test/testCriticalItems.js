@@ -9,7 +9,7 @@ describe('CriticalItemsList', function() {
     });
 
     it('should have three different types', function(done) {
-        testUser.getCriticalItemsList(function() {
+        testUser.getCriticalItemsList().then(function() {
             assert.isNotNull(testUser.critical_items);
             assert.isNotNull(testUser.critical_items[0].type);
             assert.isNotNull(testUser.critical_items[1].type);
@@ -19,7 +19,7 @@ describe('CriticalItemsList', function() {
     });
 
     it('should have vocabulary, radical, and kanji', function() {
-        testUser.getCriticalItemsList(function() {
+        testUser.getCriticalItemsList().then(function() {
             assert.isNotNull(testUser.critical_items[0].type);
             assert.isNotNull(testUser.critical_items[1].type);
             assert.isNotNull(testUser.critical_items[2].type);
@@ -30,7 +30,7 @@ describe('CriticalItemsList', function() {
     });
 
     it('should have valid characters for each type', function() {
-        testUser.getCriticalItemsList(function() {
+        testUser.getCriticalItemsList().then(function() {
             assert.isNotNull(testUser.critical_items[0].character);
             assert.isNotNull(testUser.critical_items[1].character);
             assert.isNotNull(testUser.critical_items[2].character);
@@ -41,7 +41,7 @@ describe('CriticalItemsList', function() {
     });
 
     it('should have valid meaning for each type', function() {
-        testUser.getCriticalItemsList(function() {
+        testUser.getCriticalItemsList().then(function() {
             assert.isNotNull(testUser.critical_items[0].meaning);
             assert.isString(testUser.critical_items[0].meaning);
             assert.isNotNull(testUser.critical_items[1].meaning);
@@ -52,7 +52,7 @@ describe('CriticalItemsList', function() {
     });
 
     it('should have valid level for each type', function() {
-        testUser.getCriticalItemsList(function() {
+        testUser.getCriticalItemsList().then(function() {
             assert.isNotNull(testUser.critical_items[0].level);
             assert.isNotNull(testUser.critical_items[1].level);
             assert.isNotNull(testUser.critical_items[2].level);
@@ -63,7 +63,7 @@ describe('CriticalItemsList', function() {
     });
 
     it('should have valid percentage for each type', function() {
-        testUser.getCriticalItemsList(function() {
+        testUser.getCriticalItemsList().then(function() {
             assert.isNotNull(testUser.critical_items[0].percentage);
             assert.isNotNull(testUser.critical_items[1].percentage);
             assert.isNotNull(testUser.critical_items[2].percentage);
@@ -74,41 +74,41 @@ describe('CriticalItemsList', function() {
     });
 
     it('should have valid kana for vocabulary', function() {
-        testUser.getCriticalItemsList(function() {
+        testUser.getCriticalItemsList().then(function() {
             assert.isNotNull(testUser.critical_items[1].kana);
             assert.isString(testUser.critical_items[1].kana);
         });
     });
 
     it('should have valid onyomi for kanji', function() {
-        testUser.getCriticalItemsList(function() {
+        testUser.getCriticalItemsList().then(function() {
             assert.isNotNull(testUser.critical_items[2].onyomi);
             assert.isString(testUser.critical_items[2].onyomi);
         });
     });
 
     it('should have valid kunyomi for kanji', function() {
-        testUser.getCriticalItemsList(function() {
+        testUser.getCriticalItemsList().then(function() {
             assert.isNotNull(testUser.critical_items[2].kunyomi);
             assert.isString(testUser.critical_items[2].kunyomi);
         });
     });
 
     it('should have valid nanori for kanji', function() {
-        testUser.getCriticalItemsList(function() {
+        testUser.getCriticalItemsList().then(function() {
             assert.isDefined(testUser.critical_items[2].nanori);
         });
     });
 
     it('should have valid important reading for kanji', function() {
-       testUser.getCriticalItemsList(function() {
+       testUser.getCriticalItemsList().then(function() {
             assert.isNotNull(testUser.critical_items[2].important_reading);
             assert.isString(testUser.critical_items[2].important_reading);
        });
     });
 
     it('should allow retrieval specified by type', function() {
-        testUser.getCriticalItemsList(function() {
+        testUser.getCriticalItemsList().then(function() {
             var radArray = testUser.critical_items.getRadicals(),
                 kanjiArray = testUser.critical_items.getKanji(),
                 vocabArray = testUser.critical_items.getVocabulary();
@@ -125,7 +125,7 @@ describe('CriticalItemsList', function() {
     });
 
     it('should allow retrieval specified by character', function() {
-        testUser.getCriticalItemsList(function() {
+        testUser.getCriticalItemsList().then(function() {
             var resultArray = testUser.critical_items.getByCharacter("大");
             assert.isNotNull(resultArray);
             assert.equal(resultArray.length, 1);
@@ -134,7 +134,7 @@ describe('CriticalItemsList', function() {
     });
 
     it('should allow retrieval specified by meaning', function() {
-        testUser.getCriticalItemsList(function() {
+        testUser.getCriticalItemsList().then(function() {
             var resultArray = testUser.critical_items.getByMeaning("big");
             assert.isNotNull(resultArray);
             assert.equal(resultArray.length, 1);
@@ -143,7 +143,7 @@ describe('CriticalItemsList', function() {
     });
 
     it('should allow retrieval specified by level', function() {
-        testUser.getCriticalItemsList(function() {
+        testUser.getCriticalItemsList().then(function() {
             var resultArray = testUser.critical_items.getByLevel(1);
             assert.isNotNull(resultArray);
             assert.equal(resultArray.length, 3);
@@ -152,7 +152,7 @@ describe('CriticalItemsList', function() {
     });
 
     it('should allow retrieval specified by percentage', function() {
-        testUser.getCriticalItemsList(function() {
+        testUser.getCriticalItemsList().then(function() {
             var resultArray = testUser.critical_items.getByPercentage("93");
             assert.isNotNull(resultArray);
             assert.equal(resultArray.length, 1);

@@ -9,7 +9,7 @@ describe('Vocabulary', function() {
     });
 
     it('should have a vocabulary list', function(done) {
-        testUser.getVocabularyList(function() {
+        testUser.getVocabularyList().then(function() {
             assert.isNotNull(testUser.vocabulary);
             assert.isNotNull(testUser.vocabulary[0]);
             assert.isNotNull(testUser.vocabulary[1]);
@@ -18,14 +18,14 @@ describe('Vocabulary', function() {
     });
 
     it('should have vocabulary with valid characters', function() {
-        testUser.getVocabularyList(function() {
+        testUser.getVocabularyList().then(function() {
             assert.isDefined(testUser.vocabulary[0].character);
             assert.isDefined(testUser.vocabulary[1].character);
         });
     });
 
     it('should have vocabulary with valid kana', function() {
-        testUser.getVocabularyList(function() {
+        testUser.getVocabularyList().then(function() {
             assert.isDefined(testUser.vocabulary[0].kana);
             assert.isDefined(testUser.vocabulary[1].kana);
             assert.isNotNull(testUser.vocabulary[0].kana);
@@ -36,7 +36,7 @@ describe('Vocabulary', function() {
     });
 
     it('should have vocabulary with meanings', function() {
-        testUser.getVocabularyList(function() {
+        testUser.getVocabularyList().then(function() {
             assert.isDefined(testUser.vocabulary[0].meaning);
             assert.isDefined(testUser.vocabulary[1].meaning);
             assert.isNotNull(testUser.vocabulary[0].meaning);
@@ -49,7 +49,7 @@ describe('Vocabulary', function() {
     });
 
     it('should have vocabulary with valid levels', function() {
-        testUser.getVocabularyList(function() {
+        testUser.getVocabularyList().then(function() {
             assert.isDefined(testUser.vocabulary[0].level);
             assert.isDefined(testUser.vocabulary[1].level);
             assert.isNotNull(testUser.vocabulary[0].level);
@@ -60,7 +60,7 @@ describe('Vocabulary', function() {
     });
 
     it('should have vocabulary with user_specific objects', function() {
-        testUser.getVocabularyList(function() {
+        testUser.getVocabularyList().then(function() {
             assert.isDefined(testUser.vocabulary[0].user_specific);
             assert.isDefined(testUser.vocabulary[1].user_specific);
             assert.isNotNull(testUser.vocabulary[0].user_specific);
@@ -69,7 +69,7 @@ describe('Vocabulary', function() {
     });
 
     it('should allow retrieval specified by character', function() {
-        testUser.getVocabularyList(function() {
+        testUser.getVocabularyList().then(function() {
             var resultArray = testUser.vocabulary.getByCharacter("二");
             assert.isNotNull(resultArray);
             assert.equal(resultArray.length, 1);
@@ -78,7 +78,7 @@ describe('Vocabulary', function() {
     });
 
     it('should allow retrieval specified by meaning', function() {
-        testUser.getVocabularyList(function() {
+        testUser.getVocabularyList().then(function() {
             var resultArray = testUser.vocabulary.getByMeaning("ten");
             assert.isNotNull(resultArray);
             assert.equal(resultArray.length, 1);
@@ -87,7 +87,7 @@ describe('Vocabulary', function() {
     });
 
     it('should allow retrieval specified by kana', function() {
-        testUser.getVocabularyList(function() {
+        testUser.getVocabularyList().then(function() {
             var resultArray = testUser.vocabulary.getByKana("に");
             assert.isNotNull(resultArray);
             assert.equal(resultArray.length, 1);
@@ -96,7 +96,7 @@ describe('Vocabulary', function() {
     });
 
     it('should allow retrieval specified by level', function() {
-        testUser.getVocabularyList(function() {
+        testUser.getVocabularyList().then(function() {
             var resultArray = testUser.vocabulary.getByLevel(1);
             assert.isNotNull(resultArray);
             assert.equal(resultArray.length, 2);
@@ -107,7 +107,7 @@ describe('Vocabulary', function() {
     describe('user_specific objects', function() {
 
         it('should have a valid srs property', function() {
-            testUser.getKanjiList(function() {
+            testUser.getKanjiList().then(function() {
                 assert.isDefined(testUser.vocabulary[0].user_specific.srs);
                 assert.isDefined(testUser.vocabulary[1].user_specific.srs);
                 assert.isNotNull(testUser.vocabulary[0].user_specific.srs);
@@ -238,7 +238,7 @@ describe('Vocabulary', function() {
         });
 
         it('should be able to take a single digit parameter', function(done) {
-            testUser.getVocabularyList(1, function() {
+            testUser.getVocabularyList(1).then(function() {
                 assert.isDefined(testUser.vocabulary);
                 assert.isNotNull(testUser.vocabulary);
                 assert.isNotNull(testUser.vocabulary[0]);
@@ -257,7 +257,7 @@ describe('Vocabulary', function() {
         });
 
         it('should be able to take a comma separated string of parameters', function(done) {
-            testUser.getVocabularyList("1,3", function() {
+            testUser.getVocabularyList("1,3").then(function() {
                 assert.isDefined(testUser.vocabulary);
                 assert.isNotNull(testUser.vocabulary);
                 assert.equal(testUser.vocabulary[3].level, 3);

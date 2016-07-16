@@ -274,40 +274,41 @@ var WKW = (function(global) {
     // @spec (object) - spec object for passing params
     // --@user (object) - the user object
     // --@obj (object) - the object whose data needs to be retrieved
-    // --@callback (fn) - the callback function
     // --@param (number) - optional parameter
     // --@force (boolean) - optional param to force the api call regardless of rate limiting
-    //var retrieveObjectData = function(user, obj, callback, param) {
+    // @return a Promise
     var retrieveObjectData = function(spec) {
-        // no need to refresh so callback
-        if (!isExpiredOrEmpty(spec.obj) && typeof spec.param === "undefined" && !spec.force) { spec.callback(); }
-        // callback if rate limited
-        if (spec.user.isRateLimited() && !spec.force) {
-            var error = {
-                "error": {
-                    "code": "rate_limited",
-                    "message": "403 Forbidden (Rate Limit Exceeded)"
-                }
-            };
-            spec.callback(error);
-        }
-        updateRateLimiting(spec.user);
-        var wk_url = "https://www.wanikani.com/api/user/" + spec.user.key + "/" + spec.obj.apiResourceLoc;
-        if (typeof spec.param !== "undefined") { wk_url += "/" + spec.param; }   
-        $.getJSON(wk_url + (debug_mode ? "" : "?callback=?"), function(data) {
-            var d;
-            if (data.error) {
-                spec.callback(data);
-            } else {
-                if (spec.obj.userResourceLoc === "user_information") {
-                    deepCopy(data.user_information, spec.user.user_information);
-                } else {
-                    deepCopy(data.requested_information, spec.user[spec.obj.userResourceLoc]);
-                }
-                spec.obj.isEmpty = false;
-                spec.obj.expiration = new Date();
-                spec.callback();
+        return new Promise(function(resolve, reject) {
+            // no need to refresh so callback
+            if (!isExpiredOrEmpty(spec.obj) && typeof spec.param === "undefined" && !spec.force) { resolve(); }
+            // callback if rate limited
+            if (spec.user.isRateLimited() && !spec.force) {
+                var error = {
+                    "error": {
+                        "code": "rate_limited",
+                        "message": "403 Forbidden (Rate Limit Exceeded)"
+                    }
+                };
+                reject(error);
             }
+            updateRateLimiting(spec.user);
+            var wk_url = "https://www.wanikani.com/api/user/" + spec.user.key + "/" + spec.obj.apiResourceLoc;
+            if (typeof spec.param !== "undefined") { wk_url += "/" + spec.param; }
+            $.getJSON(wk_url + (debug_mode ? "" : "?callback=?"), function(data) {
+                var d;
+                if (data.error) {
+                    reject(data);
+                } else {
+                    if (spec.obj.userResourceLoc === "user_information") {
+                        deepCopy(data.user_information, spec.user.user_information);
+                    } else {
+                        deepCopy(data.requested_information, spec.user[spec.obj.userResourceLoc]);
+                    }
+                    spec.obj.isEmpty = false;
+                    spec.obj.expiration = new Date();
+                    resolve();
+                }
+            });
         });
     };
 
@@ -346,8 +347,6 @@ var WKW = (function(global) {
         var args = Array.prototype.slice.call(arguments),
             // data type is always the last argument
             type = args.pop(),
-            // callback is always 2nd to last argument
-            callback = args.pop(),
             param = (args[0] && typeof args[0] === "string") ? args[0] : null,
             force,
             spec;
@@ -359,7 +358,6 @@ var WKW = (function(global) {
         spec = {
             "user": this,
             "obj": this[type],
-            "callback": callback,
             "force": force
         };
         // add optional param if valid
@@ -395,127 +393,115 @@ var WKW = (function(global) {
 
         // Retrieves the user's information.
         // @force (boolean) - whether or not to force the call to the api
-        // @callback (fn) - callback function
-        getUserInformation: function getUserInformation(callback) {
+        // @return a Promise
+        getUserInformation: function getUserInformation() {
             // add type to arguments before getting spec
             [].push.call(arguments, "user_information");
             var spec = getSpecObject.apply(this, arguments);
-            retrieveObjectData(spec);
+            return retrieveObjectData(spec);
         },
 
         // Retrieves the user's study queue.
         // @force (boolean) - whether or not to force the call to the api
-        // @callback (fn) - callback function
-        getStudyQueue: function getStudyQueue(callback) {
+        // @return a Promise
+        getStudyQueue: function getStudyQueue() {
             // add type to arguments before getting spec
             [].push.call(arguments, "study_queue");
             var spec = getSpecObject.apply(this, arguments);
-            retrieveObjectData(spec);
+            return retrieveObjectData(spec);
         },
 
         // Retrieves the user's level progression.
         // @force (boolean) - whether or not to force the call to the api
-        // @callback (fn) - callback function.
-        getLevelProgression: function getLevelProgression(callback) {
+        // @return a Promise
+        getLevelProgression: function getLevelProgression() {
             // add type to arguments before getting spec
             [].push.call(arguments, "level_progression");
             var spec = getSpecObject.apply(this, arguments);
-            retrieveObjectData(spec);
+            return retrieveObjectData(spec);
         },
 
         // Retrieves the user's SRS distribution.
         // @force (boolean) - whether or not to force the call to the api
-        // @callback (fn) - callback function.
-        getSRSDistribution: function getSRSDistribution(callback) {
+        // @return a Promise
+        getSRSDistribution: function getSRSDistribution() {
             // add type to arguments before getting spec
             [].push.call(arguments, "srs_distribution");
             var spec = getSpecObject.apply(this, arguments);
-            retrieveObjectData(spec);
+            return retrieveObjectData(spec);
         },
 
         // Retrieves the user's recent unlocks list.
         // @limit (string) - limit for number of items returned
         // @force (boolean) - whether or not to force the call to the api
-        // @callback (fn) - callback function.
+        // @return a Promise
         getRecentUnlocksList: function getRecentUnlocksList() {
             // add type to arguments before getting spec
             [].push.call(arguments, "recent_unlocks");
             var spec = getSpecObject.apply(this, arguments);
-            retrieveObjectData(spec);
+            return retrieveObjectData(spec);
         },
 
         // Retrieves the user's critical items list.
         // @percentage (string) - percentage correct
         // @force (boolean) - whether or not to force the call to the api
-        // @callback (fn) - callback function.
+        // @return a Promise
         getCriticalItemsList: function getCriticalItemsList() {
             // add type to arguments before getting spec
             [].push.call(arguments, "critical_items");
             var spec = getSpecObject.apply(this, arguments);
-            retrieveObjectData(spec);
+            return retrieveObjectData(spec);
         },
 
         // Retrieves the user's radicals list.
         // @levels (string) - radicals of given level(s)
         // @force (boolean) - whether or not to force the call to the api
-        // @callback (fn) - callback function.
+        // @return a Promise
         getRadicalsList: function getRadicalsList() {
             // add type to arguments before getting spec
             [].push.call(arguments, "radicals");
             var spec = getSpecObject.apply(this, arguments);
-            retrieveObjectData(spec);
+            return retrieveObjectData(spec);
         },
 
         // Retrieves the user's kanji list.
         // @levels (string) - kanji of given level(s)
         // @force (boolean) - whether or not to force the call to the api
-        // @callback (fn) - callback function.
+        // @return a Promise
         getKanjiList: function getKanjiList() {
             // add type to arguments before getting spec
             [].push.call(arguments, "kanji");
             var spec = getSpecObject.apply(this, arguments);
-            retrieveObjectData(spec);
+            return retrieveObjectData(spec);
         },
 
         // Retrieves the user's voabulary list.
         // @levels (String or Number) - vocabulary of given level(s)
         // @force (boolean) - whether or not to force the call to the api
-        // @callback (fn) - callback function.
+        // @return a Promise
         getVocabularyList: function getVocabularyList() {
             // add type to arguments before getting spec
             [].push.call(arguments, "vocabulary");
             var spec = getSpecObject.apply(this, arguments);
-            retrieveObjectData(spec);
+            return retrieveObjectData(spec);
         },
 
         // Retrieves all data for the user.
-        // Returns a success status (true if all calls passed w/o errors, false otherwise).
-        // Also returns an array of all error objects, if any.
-        // @callback (fn) - callback function
-        getAllData: function getAllData(callback) {
+        // @return a Promise
+        getAllData: function getAllData() {
             var name,
                 errors = [],
                 success = true,
                 callsFinished = 0,
+                arrayOfPromises = [],
                 funcNames = ["getUserInformation", "getStudyQueue",
                             "getLevelProgression", "getSRSDistribution", 
                             "getRecentUnlocksList", "getCriticalItemsList", 
                             "getRadicalsList", "getKanjiList", "getVocabularyList"];
-
-            // called at the end of each function that retrieves data
-            var finished = function finished(error) {
-                callsFinished += 1;
-                if (error) {
-                    success = false;
-                    errors.push(error);
-                }
-                if (callsFinished === funcNames.length) {
-                    callback(success, errors);
-                }
-            };
             for (name in funcNames) {
-                this[funcNames[name]](finished);
+                arrayOfPromises.push(this[funcNames[name]]());
             }
+            return Promise.all(arrayOfPromises);
         }
     };
 

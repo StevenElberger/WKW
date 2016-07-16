@@ -44,8 +44,7 @@ describe('The getAll function', function() {
     
     it('should populate all data structures', function(done) {
         this.timeout(10000);
-        testUser.getAllData(function(success, errors) {
-            assert.isTrue(success);
+        testUser.getAllData().then(function() {
             assert.isNotNull(testUser.user_information.username);
             assert.isNotNull(testUser.study_queue.lessons_available);
             assert.isNotNull(testUser.level_progression.radicals_progress);

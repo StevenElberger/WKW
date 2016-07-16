@@ -9,7 +9,7 @@ describe('UserInformation', function() {
     });
 
     it('should have a valid username', function(done) {
-        testUser.getUserInformation(function() {
+        testUser.getUserInformation().then(function() {
             assert.isNotNull(testUser.user_information.username);
             assert.isAbove(testUser.user_information.username.length, 0);
             done();
@@ -17,7 +17,7 @@ describe('UserInformation', function() {
     });
 
     it('should have a valid level', function() {
-        testUser.getUserInformation(function() {
+        testUser.getUserInformation().then(function() {
             assert.isNotNull(testUser.user_information.level);
             assert.isNumber(testUser.user_information.level);
             assert.isAtLeast(testUser.user_information.level, 1);
@@ -25,14 +25,14 @@ describe('UserInformation', function() {
     });
 
     it('should have a valid title', function() {
-        testUser.getUserInformation(function() {
+        testUser.getUserInformation().then(function() {
             assert.isNotNull(testUser.user_information.title);
             assert.isAbove(testUser.user_information.title.length, 0);
         });
     });
 
     it('should have topics_count', function() {
-        testUser.getUserInformation(function() {
+        testUser.getUserInformation().then(function() {
             assert.isNotNull(testUser.user_information.topics_count);
             assert.isNumber(testUser.user_information.topics_count);
             assert.isAtLeast(testUser.user_information.topics_count, 0);
@@ -40,7 +40,7 @@ describe('UserInformation', function() {
     });
 
     it('should have posts_count', function() {
-        testUser.getUserInformation(function() {
+        testUser.getUserInformation().then(function() {
             assert.isNotNull(testUser.user_information.posts_count);
             assert.isNumber(testUser.user_information.posts_count);
             assert.isAtLeast(testUser.user_information.posts_count, 0);
@@ -48,7 +48,7 @@ describe('UserInformation', function() {
     });
 
     it('should have a creation_date', function() {
-        testUser.getUserInformation(function() {
+        testUser.getUserInformation().then(function() {
             assert.isNotNull(testUser.user_information.creation_date);
         });
     });

@@ -9,7 +9,7 @@ describe('Kanji', function() {
     });
 
     it('should have a kanji list', function(done) {
-        testUser.getKanjiList(function() {
+        testUser.getKanjiList().then(function() {
             assert.isNotNull(testUser.kanji);
             assert.isNotNull(testUser.kanji[0]);
             assert.isNotNull(testUser.kanji[1]);
@@ -18,14 +18,14 @@ describe('Kanji', function() {
     });
 
     it('should have kanji with valid characters', function() {
-        testUser.getKanjiList(function() {
+        testUser.getKanjiList().then(function() {
             assert.isDefined(testUser.kanji[0].character);
             assert.isDefined(testUser.kanji[1].character);
         });
     });
 
     it('should have kanji with meanings', function() {
-        testUser.getKanjiList(function() {
+        testUser.getKanjiList().then(function() {
             assert.isDefined(testUser.kanji[0].meaning);
             assert.isDefined(testUser.kanji[1].meaning);
             assert.isNotNull(testUser.kanji[0].meaning);
@@ -38,7 +38,7 @@ describe('Kanji', function() {
     });
 
     it('should have kanji with valid levels', function() {
-        testUser.getKanjiList(function() {
+        testUser.getKanjiList().then(function() {
             assert.isDefined(testUser.kanji[0].level);
             assert.isDefined(testUser.kanji[1].level);
             assert.isNotNull(testUser.kanji[0].level);
@@ -49,7 +49,7 @@ describe('Kanji', function() {
     });
 
     it('should have kanji with user_specific objects', function() {
-        testUser.getKanjiList(function() {
+        testUser.getKanjiList().then(function() {
             assert.isDefined(testUser.kanji[0].user_specific);
             assert.isDefined(testUser.kanji[1].user_specific);
             assert.isNotNull(testUser.kanji[0].user_specific);
@@ -58,7 +58,7 @@ describe('Kanji', function() {
     });
 
     it('should allow retrieval specified by character', function() {
-        testUser.getKanjiList(function() {
+        testUser.getKanjiList().then(function() {
             var resultArray = testUser.kanji.getByCharacter("口");
             assert.isNotNull(resultArray);
             assert.equal(resultArray.length, 1);
@@ -67,7 +67,7 @@ describe('Kanji', function() {
     });
 
     it('should allow retrieval specified by meaning', function() {
-        testUser.getKanjiList(function() {
+        testUser.getKanjiList().then(function() {
             var resultArray = testUser.kanji.getByMeaning("above, up, over");
             assert.isNotNull(resultArray);
             assert.equal(resultArray.length, 1);
@@ -76,7 +76,7 @@ describe('Kanji', function() {
     });
 
     it('should allow retrieval specified by important reading', function() {
-        testUser.getKanjiList(function() {
+        testUser.getKanjiList().then(function() {
             var resultArray = testUser.kanji.getByImportantReading("onyomi");
             assert.isNotNull(resultArray);
             assert.equal(resultArray.length, 2);
@@ -85,7 +85,7 @@ describe('Kanji', function() {
     });
 
     it('should allow retrieval specified by level', function() {
-        testUser.getKanjiList(function() {
+        testUser.getKanjiList().then(function() {
             var resultArray = testUser.kanji.getByLevel(1);
             assert.isNotNull(resultArray);
             assert.equal(resultArray.length, 2);
@@ -96,7 +96,7 @@ describe('Kanji', function() {
     describe('user_specific objects', function() {
 
         it('should have a valid srs property', function() {
-            testUser.getKanjiList(function() {
+            testUser.getKanjiList().then(function() {
                 assert.isDefined(testUser.kanji[0].user_specific.srs);
                 assert.isDefined(testUser.kanji[1].user_specific.srs);
                 assert.isNotNull(testUser.kanji[0].user_specific.srs);
@@ -227,7 +227,7 @@ describe('Kanji', function() {
         });
 
         it('should be able to take a single digit parameter', function(done) {
-            testUser.getKanjiList(1, function() {
+            testUser.getKanjiList(1).then(function() {
                 assert.isDefined(testUser.kanji);
                 assert.isNotNull(testUser.kanji);
                 assert.isNotNull(testUser.kanji[0]);
@@ -246,7 +246,7 @@ describe('Kanji', function() {
         });
 
         it('should be able to take a comma separated string of parameters', function(done) {
-            testUser.getKanjiList("1,3", function() {
+            testUser.getKanjiList("1,3").then(function() {
                 assert.isDefined(testUser.kanji);
                 assert.isNotNull(testUser.kanji);
                 assert.equal(testUser.kanji[3].level, 3);

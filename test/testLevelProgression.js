@@ -9,7 +9,7 @@ describe('LevelProgression', function() {
     });
 
     it('should have a valid number of radicals_progress', function(done) {
-        testUser.getLevelProgression(function() {
+        testUser.getLevelProgression().then(function() {
             assert.isNotNull(testUser.level_progression.radicals_progress);
             assert.isNumber(testUser.level_progression.radicals_progress);
             assert.isAtLeast(testUser.level_progression.radicals_progress, 0);
@@ -19,7 +19,7 @@ describe('LevelProgression', function() {
     });
 
     it('should have a valid number of radicals_total', function() {
-        testUser.getLevelProgression(function() {
+        testUser.getLevelProgression().then(function() {
             assert.isNotNull(testUser.level_progression.radicals_total);
             assert.isNumber(testUser.level_progression.radicals_total);
             assert.isAtLeast(testUser.level_progression.radicals_total, 0);
@@ -28,7 +28,7 @@ describe('LevelProgression', function() {
     });
 
     it('should have a valid number of kanji_progress', function() {
-        testUser.getLevelProgression(function() {
+        testUser.getLevelProgression().then(function() {
             assert.isNotNull(testUser.level_progression.kanji_progress);
             assert.isNumber(testUser.level_progression.kanji_progress);
             assert.isAtLeast(testUser.level_progression.kanji_progress, 0);
@@ -37,7 +37,7 @@ describe('LevelProgression', function() {
     });
 
     it('shouldh ave a valid number of kanji_total', function() {
-        testUser.getLevelProgression(function() {
+        testUser.getLevelProgression().then(function() {
             assert.isNotNull(testUser.level_progression.kanji_total);
             assert.isNumber(testUser.level_progression.kanji_total);
             assert.isAtLeast(testUser.level_progression.kanji_total, 0);

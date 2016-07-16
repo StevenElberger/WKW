@@ -11,7 +11,7 @@ describe('Rate Limiting', function() {
     ]);
     
     it('should be kept track of after each call', function(done) {
-        testUser.getUserInformation(function() {
+        testUser.getUserInformation().then(function() {
             assert.isNotNull(testUser.num_requests_made);
             assert.isNumber(testUser.num_requests_made);
             assert.equal(testUser.num_requests_made, 1);
@@ -20,7 +20,7 @@ describe('Rate Limiting', function() {
     });
 
     it('should not increment counters if the API is not called', function() {
-        testUser.getUserInformation(function() {
+        testUser.getUserInformation().then(function() {
             // already cached so expect the same number as last call
             assert.isNotNull(testUser.num_requests_made);
             assert.isNumber(testUser.num_requests_made);
@@ -29,13 +29,12 @@ describe('Rate Limiting', function() {
     });
 
     it('should prevent a call to the API if >= 100 are made within an hour', function() {
-        for (var i = 0; i < 98; i++) {
-            testUser.getUserInformation(true, function() {});
-        }
-        testUser.getUserInformation(function() {
+        testUser.num_requests_made = 100;
+        // use the force boolean to ignore rate limiting
+        testUser.getUserInformation(true).then(function() {
             assert.isNotNull(testUser.num_requests_made);
             assert.isNumber(testUser.num_requests_made);
-            assert.equal(testUser.num_requests_made, 100);
+            assert.equal(testUser.num_requests_made, 101);
         });
     });
 });

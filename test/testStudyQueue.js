@@ -9,7 +9,7 @@ describe('StudyQueue', function() {
     });
 
     it('should have a valid number of lessons_available', function(done) {
-        testUser.getStudyQueue(function() {
+        testUser.getStudyQueue().then(function() {
             assert.isNotNull(testUser.study_queue.lessons_available);
             assert.isNumber(testUser.study_queue.lessons_available);
             assert.isAtLeast(testUser.study_queue.lessons_available,0);
@@ -18,7 +18,7 @@ describe('StudyQueue', function() {
     });
 
     it('should have a valid number of reviews available', function() {
-        testUser.getStudyQueue(function() {
+        testUser.getStudyQueue().then(function() {
             assert.isNotNull(testUser.study_queue.reviews_available);
             assert.isNumber(testUser.study_queue.reviews_available);
             assert.isAtLeast(testUser.study_queue.reviews_available, 0);
@@ -26,13 +26,13 @@ describe('StudyQueue', function() {
     });
 
     it('should have a valid next review date', function() {
-        testUser.getStudyQueue(function() {
+        testUser.getStudyQueue().then(function() {
             assert.isDefined(testUser.study_queue.next_review_date);
         });
     });
 
     it('should have a valid number of reviews available for next hour', function() {
-        testUser.getStudyQueue(function() {
+        testUser.getStudyQueue().then(function() {
             assert.isNotNull(testUser.study_queue.reviews_available_next_hour);
             assert.isNumber(testUser.study_queue.reviews_available_next_hour);
             assert.isAtLeast(testUser.study_queue.reviews_available_next_hour, 0);
@@ -40,7 +40,7 @@ describe('StudyQueue', function() {
     });
 
     it('should have a valid number of reviews available for next day', function() {
-        testUser.getStudyQueue(function() {
+        testUser.getStudyQueue().then(function() {
             assert.isNotNull(testUser.study_queue.reviews_available_next_day);
             assert.isNumber(testUser.study_queue.reviews_available_next_day);
             assert.isAtLeast(testUser.study_queue.reviews_available_next_day, 0);
