@@ -70,6 +70,43 @@ describe('Radicals', function() {
         });
     });
 
+    it('should allow retrieval specified by character', function() {
+        testUser.getRadicalsList(function() {
+            var resultArray = testUser.radicals.getByCharacter("大");
+            assert.isNotNull(resultArray);
+            assert.equal(resultArray.length, 1);
+            assert.equal(resultArray[0].character, "大");
+        });
+    });
+
+    it('should allow retrieval specified by meaning', function() {
+        testUser.getRadicalsList(function() {
+            var resultArray = testUser.radicals.getByMeaning("stick");
+            assert.isNotNull(resultArray);
+            assert.equal(resultArray.length, 1);
+            assert.equal(resultArray[0].meaning, "stick");
+        });
+    });
+
+    it('should allow retrieval specified by image', function() {
+        testUser.getRadicalsList(function() {
+            var imageURL = "https://s3.amazonaws.com/s3.wanikani.com/images/radicals/802e9542627291d4282601ded41ad16ce915f60f.png",
+                resultArray = testUser.radicals.getByImage(imageURL);
+            assert.isNotNull(resultArray);
+            assert.equal(resultArray.length, 1);
+            assert.equal(resultArray[0].image, imageURL);
+        });
+    });
+
+    it('should allow retrieval specified by level', function() {
+        testUser.getRadicalsList(function() {
+            var resultArray = testUser.radicals.getByLevel(1);
+            assert.isNotNull(resultArray);
+            assert.equal(resultArray.length, 2);
+            assert.equal(resultArray[1].level, 1);
+        });
+    });
+
     describe('user_specific objects', function() {
 
         it('should have a valid srs property', function() {

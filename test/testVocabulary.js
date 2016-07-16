@@ -59,12 +59,48 @@ describe('Vocabulary', function() {
         });
     });
 
-    it('should have kanji with user_specific objects', function() {
-        testUser.getKanjiList(function() {
+    it('should have vocabulary with user_specific objects', function() {
+        testUser.getVocabularyList(function() {
             assert.isDefined(testUser.vocabulary[0].user_specific);
             assert.isDefined(testUser.vocabulary[1].user_specific);
             assert.isNotNull(testUser.vocabulary[0].user_specific);
             assert.isNotNull(testUser.vocabulary[1].user_specific);
+        });
+    });
+
+    it('should allow retrieval specified by character', function() {
+        testUser.getVocabularyList(function() {
+            var resultArray = testUser.vocabulary.getByCharacter("二");
+            assert.isNotNull(resultArray);
+            assert.equal(resultArray.length, 1);
+            assert.equal(resultArray[0].character, "二");
+        });
+    });
+
+    it('should allow retrieval specified by meaning', function() {
+        testUser.getVocabularyList(function() {
+            var resultArray = testUser.vocabulary.getByMeaning("ten");
+            assert.isNotNull(resultArray);
+            assert.equal(resultArray.length, 1);
+            assert.equal(resultArray[0].meaning, "ten");
+        });
+    });
+
+    it('should allow retrieval specified by kana', function() {
+        testUser.getVocabularyList(function() {
+            var resultArray = testUser.vocabulary.getByKana("に");
+            assert.isNotNull(resultArray);
+            assert.equal(resultArray.length, 1);
+            assert.equal(resultArray[0].kana, "に");
+        });
+    });
+
+    it('should allow retrieval specified by level', function() {
+        testUser.getVocabularyList(function() {
+            var resultArray = testUser.vocabulary.getByLevel(1);
+            assert.isNotNull(resultArray);
+            assert.equal(resultArray.length, 2);
+            assert.equal(resultArray[1].level, 1);
         });
     });
 

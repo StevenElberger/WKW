@@ -140,34 +140,14 @@ var WKW = (function(global) {
     // @nanori (String or null) - the nanori reading for this kanji
     // @important_reading (String) - which reading is important (onyomi, kunyomi, or nanori)
     var recentUnlocksProto = makeProto({ apiResourceLoc: "recent-unlocks", userResourceLoc: "recent_unlocks" });
-    recentUnlocksProto.getRadicals = function() {
-        this.getRadicals = listInterface.getBy.bind(this, "type", "radical");
-        return listInterface.getBy.call(this, "type", "radical");
-    };
-    recentUnlocksProto.getKanji = function() {
-        this.getKanji = listInterface.getBy.bind(this, "type", "kanji");
-        return listInterface.getBy.call(this, "type", "kanji");
-    };
-    recentUnlocksProto.getVocabulary = function() {
-        this.getVocabulary = listInterface.getBy.bind(this, "type", "vocabulary");
-        return listInterface.getBy.call(this, "type", "vocabulary");
-    };
-    recentUnlocksProto.getByCharacter = function(character) {
-        this.getByCharacter = listInterface.getBy.bind(this, "character");
-        return listInterface.getBy.call(this, "character", character);
-    };
-    recentUnlocksProto.getByMeaning = function(meaning) {
-        this.getByMeaning = listInterface.getBy.bind(this, "meaning");
-        return listInterface.getBy.call(this, "meaning", meaning);
-    };
-    recentUnlocksProto.getByLevel = function(level) {
-        this.getByLevel = listInterface.getBy.bind(this, "level");
-        return listInterface.getBy.call(this, "level", level);
-    };
-    recentUnlocksProto.getByUnlockedDate = function(unlocked_date) {
-        this.getByUnlockedDate = listInterface.getBy.bind(this, "unlocked_date");
-        return listInterface.getBy.call(this, "unlocked_date", unlocked_date);
-    };
+    recentUnlocksProto.getBy = listInterface.getBy;
+    recentUnlocksProto.getRadicals = function() { return this.getBy("type", "radical"); };
+    recentUnlocksProto.getKanji = function() { return this.getBy("type", "kanji"); };
+    recentUnlocksProto.getVocabulary = function() { return this.getBy("type", "vocabulary"); };
+    recentUnlocksProto.getByCharacter = function(character) { return this.getBy("character", character); };
+    recentUnlocksProto.getByMeaning = function(meaning) { return this.getBy("meaning", meaning); };
+    recentUnlocksProto.getByLevel = function(level) { return this.getBy("level", level); };
+    recentUnlocksProto.getByUnlockedDate = function(unlocked_date) { return this.getBy("unlocked_date", unlocked_date); };
 
     // Critical Items List Prototype (user.critical_items)
     // 3 different types of objects in here
@@ -187,34 +167,14 @@ var WKW = (function(global) {
     // @nanori (String or null) - the nanori reading for this kanji
     // @important_reading (String) - which reading is important (onyomi, kunyomi, or nanori)
     var criticalItemsProto = makeProto({ apiResourceLoc: "critical-items", userResourceLoc: "critical_items" });
-    criticalItemsProto.getRadicals = function() {
-        this.getRadicals = listInterface.getBy.bind(this, "type", "radical");
-        return listInterface.getBy.call(this, "type", "radical");
-    };
-    criticalItemsProto.getKanji = function() {
-        this.getKanji = listInterface.getBy.bind(this, "type", "kanji");
-        return listInterface.getBy.call(this, "type", "kanji");
-    };
-    criticalItemsProto.getVocabulary = function() {
-        this.getVocabulary = listInterface.getBy.bind(this, "type", "vocabulary");
-        return listInterface.getBy.call(this, "type", "vocabulary");
-    };
-    criticalItemsProto.getByCharacter = function(character) {
-        this.getByCharacter = listInterface.getBy.bind(this, "character");
-        return listInterface.getBy.call(this, "character", character);
-    };
-    criticalItemsProto.getByMeaning = function(meaning) {
-        this.getByMeaning = listInterface.getBy.bind(this, "meaning");
-        return listInterface.getBy.call(this, "meaning", meaning);
-    };
-    criticalItemsProto.getByLevel = function(level) {
-        this.getByLevel = listInterface.getBy.bind(this, "level");
-        return listInterface.getBy.call(this, "level", level);
-    };
-    criticalItemsProto.getByPercentage = function(percentage) {
-        this.getByPercentage = listInterface.getBy.bind(this, "percentage");
-        return listInterface.getBy.call(this, "percentage", percentage);
-    };
+    criticalItemsProto.getBy = listInterface.getBy;
+    criticalItemsProto.getRadicals = function() { return this.getBy("type", "radical"); };
+    criticalItemsProto.getKanji = function() { return this.getBy("type", "kanji"); };
+    criticalItemsProto.getVocabulary = function() { return this.getBy("type", "vocabulary"); };
+    criticalItemsProto.getByCharacter = function(character) { return this.getBy("character", character); };
+    criticalItemsProto.getByMeaning = function(meaning) { return this.getBy("meaning", meaning); };
+    criticalItemsProto.getByLevel = function(level) { return this.getBy("level", level); };
+    criticalItemsProto.getByPercentage = function(percentage) { return this.getBy("percentage", percentage); };
 
     // Radicals List Prototype (user.radicals)
     // @character (String or null) - the character for this radical
@@ -239,22 +199,11 @@ var WKW = (function(global) {
     // -- @meaning_note (String or null) - user-created notes for meaning
     // -- @user_synonyms (Array or null) - user-created synonyms for this item
     var radicalsProto = makeProto({ apiResourceLoc: "radicals", userResourceLoc: "radicals" });
-    radicalsProto.getByCharacter = function(character) {
-        this.getByCharacter = listInterface.getBy.bind(this, "character");
-        return listInterface.getBy.call(this, "character", character);
-    };
-    radicalsProto.getByMeaning = function(meaning) {
-        this.getByMeaning = listInterface.getBy.bind(this, "meaning");
-        return listInterface.getBy.call(this, "meaning", meaning);
-    };
-    radicalsProto.getByImage = function(image) {
-        this.getByImage = listInterface.getBy.bind(this, "image");
-        return listInterface.getBy.call(this, "image", image);
-    };
-    radicalsProto.getByLevel = function(level) {
-        this.getByLevel = listInterface.getBy.bind(this, "level");
-        return listInterface.getBy.call(this, "level", level);
-    };
+    radicalsProto.getBy = listInterface.getBy;
+    radicalsProto.getByCharacter = function(character) { return this.getBy("character", character); };
+    radicalsProto.getByMeaning = function(meaning) { return this.getBy("meaning", meaning); };
+    radicalsProto.getByImage = function(image) { return this.getBy("image", image); };
+    radicalsProto.getByLevel = function(level) { return this.getBy("level", level); };
 
     // Kanji List Prototype (user.kanji)
     // @character (String) - character for this kanji
@@ -266,22 +215,11 @@ var WKW = (function(global) {
     // @level (Number) - level at which this kanji was unlocked
     // @user_specific (Object) - user specific information (see user.radicals.user_specific)
     var kanjiProto = makeProto({ apiResourceLoc: "kanji", userResourceLoc: "kanji" });
-    kanjiProto.getByCharacter = function(character) {
-        this.getByCharacter = listInterface.getBy.bind(this, "character");
-        return listInterface.getBy.call(this, "character", character);
-    };
-    kanjiProto.getByMeaning = function(meaning) {
-        this.getByMeaning = listInterface.getBy.bind(this, "meaning");
-        return listInterface.getBy.call(this, "meaning", meaning);
-    };
-    kanjiProto.getByImportantReading = function(important_reading) {
-        this.getByImportantReading = listInterface.getBy.bind(this, "important_reading");
-        return listInterface.getBy.call(this, "important_reading", important_reading);
-    };
-    kanjiProto.getByLevel = function(level) {
-        this.getByLevel = listInterface.getBy.bind(this, "level");
-        return listInterface.getBy.call(this, "level", level);
-    };
+    kanjiProto.getBy = listInterface.getBy;
+    kanjiProto.getByCharacter = function(character) { return this.getBy("character", character); };
+    kanjiProto.getByMeaning = function(meaning) { return this.getBy("meaning", meaning); };
+    kanjiProto.getByImportantReading = function(important_reading) { return this.getBy("important_reading", important_reading); };
+    kanjiProto.getByLevel = function(level) { return this.getBy("level", level); };
 
     // Vocabulary List Prototype (user.vocabulary)
     // @character (String) - character for this word
@@ -290,22 +228,11 @@ var WKW = (function(global) {
     // @level (Number) - level at which this item was unlocked
     // @user_specific (Object) - user specific information (see user.radicals.user_specific)
     var vocabularyProto = makeProto({ apiResourceLoc: "vocabulary", userResourceLoc: "vocabulary" });
-    vocabularyProto.getByCharacter = function(character) {
-        this.getByCharacter = listInterface.getBy.bind(this, "character");
-        return listInterface.getBy.call(this, "character", character);
-    };
-    vocabularyProto.getByKana = function(kana) {
-        this.getByKana = listInterface.getBy.bind(this, "kana");
-        return listInterface.getBy.call(this, "kana", kana);
-    };
-    vocabularyProto.getByMeaning = function(meaning) {
-        this.getByMeaning = listInterface.getBy.bind(this, "meaning");
-        return listInterface.getBy.call(this, "meaning", meaning);
-    };
-    vocabularyProto.getByLevel = function(level) {
-        this.getByLevel = listInterface.getBy.bind(this, "level");
-        return listInterface.getBy.call(this, "level", level);
-    };
+    vocabularyProto.getBy = listInterface.getBy;
+    vocabularyProto.getByCharacter = function(character) { return this.getBy("character", character); };
+    vocabularyProto.getByKana = function(kana) { return this.getBy("kana", kana); };
+    vocabularyProto.getByMeaning = function(meaning) { return this.getBy("meaning", meaning); };
+    vocabularyProto.getByLevel = function(level) { return this.getBy("level", level); };
 
 
     // Performs a deep copy on parent over to child.

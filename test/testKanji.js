@@ -57,6 +57,42 @@ describe('Kanji', function() {
         });
     });
 
+    it('should allow retrieval specified by character', function() {
+        testUser.getKanjiList(function() {
+            var resultArray = testUser.kanji.getByCharacter("口");
+            assert.isNotNull(resultArray);
+            assert.equal(resultArray.length, 1);
+            assert.equal(resultArray[0].character, "口");
+        });
+    });
+
+    it('should allow retrieval specified by meaning', function() {
+        testUser.getKanjiList(function() {
+            var resultArray = testUser.kanji.getByMeaning("above, up, over");
+            assert.isNotNull(resultArray);
+            assert.equal(resultArray.length, 1);
+            assert.equal(resultArray[0].meaning, "above, up, over");
+        });
+    });
+
+    it('should allow retrieval specified by important reading', function() {
+        testUser.getKanjiList(function() {
+            var resultArray = testUser.kanji.getByImportantReading("onyomi");
+            assert.isNotNull(resultArray);
+            assert.equal(resultArray.length, 2);
+            assert.equal(resultArray[0].important_reading, "onyomi");
+        });
+    });
+
+    it('should allow retrieval specified by level', function() {
+        testUser.getKanjiList(function() {
+            var resultArray = testUser.kanji.getByLevel(1);
+            assert.isNotNull(resultArray);
+            assert.equal(resultArray.length, 2);
+            assert.equal(resultArray[1].level, 1);
+        });
+    });
+
     describe('user_specific objects', function() {
 
         it('should have a valid srs property', function() {

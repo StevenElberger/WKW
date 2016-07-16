@@ -106,4 +106,57 @@ describe('CriticalItemsList', function() {
             assert.isString(testUser.critical_items[2].important_reading);
        });
     });
+
+    it('should allow retrieval specified by type', function() {
+        testUser.getCriticalItemsList(function() {
+            var radArray = testUser.critical_items.getRadicals(),
+                kanjiArray = testUser.critical_items.getKanji(),
+                vocabArray = testUser.critical_items.getVocabulary();
+            assert.isNotNull(radArray);
+            assert.equal(radArray.length, 1);
+            assert.equal(radArray[0].type, "radical");
+            assert.isNotNull(kanjiArray);
+            assert.equal(kanjiArray.length, 1);
+            assert.equal(kanjiArray[0].type, "kanji");
+            assert.isNotNull(vocabArray);
+            assert.equal(vocabArray.length, 1);
+            assert.equal(vocabArray[0].type, "vocabulary");
+        });
+    });
+
+    it('should allow retrieval specified by character', function() {
+        testUser.getCriticalItemsList(function() {
+            var resultArray = testUser.critical_items.getByCharacter("大");
+            assert.isNotNull(resultArray);
+            assert.equal(resultArray.length, 1);
+            assert.equal(resultArray[0].character, "大");
+        });
+    });
+
+    it('should allow retrieval specified by meaning', function() {
+        testUser.getCriticalItemsList(function() {
+            var resultArray = testUser.critical_items.getByMeaning("big");
+            assert.isNotNull(resultArray);
+            assert.equal(resultArray.length, 1);
+            assert.equal(resultArray[0].meaning, "big");
+        });
+    });
+
+    it('should allow retrieval specified by level', function() {
+        testUser.getCriticalItemsList(function() {
+            var resultArray = testUser.critical_items.getByLevel(1);
+            assert.isNotNull(resultArray);
+            assert.equal(resultArray.length, 3);
+            assert.equal(resultArray[2].level, 1);
+        });
+    });
+
+    it('should allow retrieval specified by percentage', function() {
+        testUser.getCriticalItemsList(function() {
+            var resultArray = testUser.critical_items.getByPercentage("93");
+            assert.isNotNull(resultArray);
+            assert.equal(resultArray.length, 1);
+            assert.equal(resultArray[0].percentage, "93");
+        });
+    });
 });
