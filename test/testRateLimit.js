@@ -10,12 +10,11 @@ describe('Rate Limiting', function() {
         }
     ]);
     
-    it('should be kept track of after each call', function(done) {
+    it('should be kept track of after each call', function() {
         testUser.getUserInformation().then(function() {
             assert.isNotNull(testUser.num_requests_made);
             assert.isNumber(testUser.num_requests_made);
             assert.equal(testUser.num_requests_made, 1);
-            done();
         });
     });
 
@@ -28,13 +27,16 @@ describe('Rate Limiting', function() {
         });
     });
 
-    it('should prevent a call to the API if >= 100 are made within an hour', function() {
-        testUser.num_requests_made = 100;
-        // use the force boolean to ignore rate limiting
-        testUser.getUserInformation(true).then(function() {
+    it('should prevent a call to the API if >= 100 are made within an hour', function(done) {
+        testUser.getUserInformation().then(function() {
+            testUser.num_requests_made = 100;
+            // use the force boolean to ignore rate limiting
+            return testUser.getUserInformation(true);
+        }).then(function() {
             assert.isNotNull(testUser.num_requests_made);
             assert.isNumber(testUser.num_requests_made);
             assert.equal(testUser.num_requests_made, 101);
+            done();
         });
     });
 });

@@ -1,7 +1,9 @@
 // WKW - Client Side JS Wrapper for WaniKani API
 var WKW = (function(global) {
-    var debug_mode = false;
+    var users = {},
+        debug_mode = false;
     if (global.wkw_debug) { debug_mode = true; }
+
     // Prototype for user's data objects.
     // Contains basic state and functionality (e.g., expiration and emptiness)
     // @time (Number) - the expiration time for this data type
@@ -19,8 +21,9 @@ var WKW = (function(global) {
         isExpired: function() { return new Date() - this.expiration > this.time; }
     };
 
-    // factory function for proto-based objects
+    // Factory function for proto-based objects.
     // @overrides (object) - properties to overwrite in this object's prototype
+    // @return a proto object
     var makeProto = function(overrides) {
         var key, result, spec = {};
         for (key in overrides) {
@@ -306,6 +309,7 @@ var WKW = (function(global) {
                     }
                     spec.obj.isEmpty = false;
                     spec.obj.expiration = new Date();
+                    saveUsers();
                     resolve();
                 }
             });
@@ -509,6 +513,7 @@ var WKW = (function(global) {
     // Factory for user objects.
     // @key (Number) - user's WK API key
     var getUser = function(api_key) {
+        if (users[api_key]) { return users[api_key]; }
         var result = Object.create(user);
         result.key = api_key;
         result.first_request_date = 0;
@@ -522,11 +527,80 @@ var WKW = (function(global) {
         result.radicals = Object.create(radicalsProto);
         result.kanji = Object.create(kanjiProto);
         result.vocabulary = Object.create(vocabularyProto);
+        users[api_key] = result;
         return result;
     };
 
-    return {
-        getUser: getUser
+    // Tests whether or not browser supports local storage.
+    // @return true if supported, false otherwise
+    var storageAvailable = function(type) {
+        try {
+            var storage = window[type],
+                x = "__storage_test__";
+            storage.setItem(x, x);
+            storage.removeItem(x);
+            return true;
+        } catch(e) {
+            return false;
+        }
     };
+
+    // Retrieves any data from localStorage and
+    // keeps a local cache inside the users object.
+    // Called on initializing WKW and available in debug.
+    var getStoredData = function() {
+        var user,
+            item,
+            tempUser,
+            storedUser,
+            wkwStorage;
+        if (storageAvailable("localStorage")) {
+            wkwStorage = localStorage.getItem("WKW");
+            if (wkwStorage) {
+                wkwStorage = JSON.parse(wkwStorage);
+                // stored users have no functionality from the get-go
+                // so we need to make one with the same api key
+                // and perform a deep copy from the stored data
+                for (user in wkwStorage) {
+                    tempUser = getUser(user);
+                    storedUser = wkwStorage[user];
+                    // if we deep copied the users the data objects
+                    // would lose their prototypes
+                    for (item in storedUser) {
+                        deepCopy(storedUser[item], tempUser[item]);
+                    }
+                    users[tempUser.key] = tempUser;
+                }
+            }
+        }
+    };
+
+    // Saves the local cache of users (the users object)
+    // in localStorage. Called after any data is updated.
+    var saveUsers = function() {
+        var user,
+            wkwStorage = {};
+        if (storageAvailable("localStorage")) {
+            localStorage.removeItem("WKW");
+            // build up object to store
+            for (user in users) {
+                wkwStorage[users[user].key] = users[user];
+            }
+            localStorage.setItem("WKW", JSON.stringify(wkwStorage));
+        }
+    };
+
+    getStoredData();
+
+    if (debug_mode) {
+        return {
+            getUser: getUser,
+            getStoredData: getStoredData
+        };
+    } else {
+        return {
+            getUser: getUser
+        };
+    }
 
 }(this));
