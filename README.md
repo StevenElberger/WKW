@@ -266,19 +266,33 @@ Items that are at the burned level. (Same items as apprentice, above)
 ## user.recent_unlocks
 The data object for the user's recent unlocks. This stores data from the API resource `recent-unlocks`.
 All items have the following common attributes:
+
 **type** `string` - type of item in the list (radical, kanji, vocabulary)
+
 **character** `string` - the character(s) for this item
+
 **meaning** `string` - a comma separated string of meanings for this item
+
 **level** `number` - the level at which this item was unlocked
+
 **unlocked_date** `number` - unix timestamp for when this item was unlocked
-Vocabulary only:
+
+### Vocabulary only:
+
 **kana** `string` - the katana or hiragana representation for this word
-Radical only:
+
+### Radical only:
+
 **image** `string | null` - the URL of the image, if any (otherwise null)
-Kanji only:
+
+### Kanji only:
+
 **onyomi** `string` - the on'yomi reading for this kanji
+
 **kunyomi** `string` - the kun'yomi reading for this kanji
+
 **nanori** `string` - the nanori reading for this kanji
+
 **important_reading** `string` - which reading is important for this kanji (onyomi, kunyomi, or nanori)
 
 ### getBy(property, value)
@@ -326,19 +340,33 @@ Returns an array of objects whose specified properties have the specified value.
 ## user.critical_items
 The data object for the user's critical items. This stores data from the API resource `critical-items`.
 All items have the following common attributes:
+
 **type** `string` - type of item in the list (radical, kanji, vocabulary)
+
 **character** `string` - the character(s) for this item
+
 **meaning** `string` - a comma separated string of meanings for this item
+
 **level** `number` - the level at which this item was unlocked
+
 **percentage** `number` - what percentage this item has been reviewed correctly
-Vocabulary only:
+
+### Vocabulary only:
+
 **kana** `string` - the katana or hiragana representation for this word
-Radical only:
+
+### Radical only:
+
 **image** `string | null` - the URL of the image, if any (otherwise null)
-Kanji only:
+
+### Kanji only:
+
 **onyomi** `string` - the on'yomi reading for this kanji
+
 **kunyomi** `string` - the kun'yomi reading for this kanji
+
 **nanori** `string` - the nanori reading for this kanji
+
 **important_reading** `string` - which reading is important for this kanji (onyomi, kunyomi, or nanori)
 
 
@@ -387,27 +415,48 @@ Returns an array of objects whose specified properties have the specified value.
 ## user.radicals
 The data object for the user's radicals. This stores data from the API resource `radicals`.
 All items have the following common attributes:
+
 **character** `string` - the character(s) for this item
+
 **meaning** `string` - a comma separated string of meanings for this item
+
 **image** `string | null` - url for the image of this item
+
 **level** `number` - the level at which this item was unlocked
+
 **user_specific** `object` - user specific information
-  **srs** `string` - the group this item is in (apprentice, guru, etc.)
-  **srs_numeric** `number` - tbd
-  **unlocked_date** `number` - unix timestamp for when this item was unlocked
-  **available_date** `number` - unix timestamp for when this item will be ready for review
-  **burned** `boolean` - whether or not this item is burned
-  **burned_date** `number` - unix timestamp for when this item was burned (0 if not burned)
-  **meaning_correct** `number` - number of times meaning was answered correctly
-  **meaning_incorrect** `number` - number of times meaning was answered incorrectly
-  **meaning_max_streak** `number` - highest number of times meaning was answered correctly
-  **meaning_current_streak** `number` - current streak of consecutively correct answers
-  **reading_correct** `number | null` - number of times reading was answered correctly
-  **reading_incorrect** `number | null` - number of times reading was answered incorrectly
-  **reading_max_streak** `number | null` - highest number of times meaning was answered correctly consecutively
-  **reading_current_streak** `number | null` - current number of times meaning was answered correctly consecutively
-  **meaning_note** `string | null` - user-created notes for meaning
-  **user_synonyms** `array | null` - user-created synonyms for this item
+
+  * **srs** `string` - the group this item is in (apprentice, guru, etc.)
+  
+  * **srs_numeric** `number` - tbd
+  
+  * **unlocked_date** `number` - unix timestamp for when this item was unlocked
+  
+  * **available_date** `number` - unix timestamp for when this item will be ready for review
+  
+  * **burned** `boolean` - whether or not this item is burned
+  
+  * **burned_date** `number` - unix timestamp for when this item was burned (0 if not burned)
+  
+  * **meaning_correct** `number` - number of times meaning was answered correctly
+  
+  * **meaning_incorrect** `number` - number of times meaning was answered incorrectly
+  
+  * **meaning_max_streak** `number` - highest number of times meaning was answered correctly
+  
+  * **meaning_current_streak** `number` - current streak of consecutively correct answers
+  
+  * **reading_correct** `number | null` - number of times reading was answered correctly
+  
+  * **reading_incorrect** `number | null` - number of times reading was answered incorrectly
+  
+  * **reading_max_streak** `number | null` - highest number of times meaning was answered correctly consecutively
+  
+  * **reading_current_streak** `number | null` - current number of times meaning was answered correctly consecutively
+  
+  * **meaning_note** `string | null` - user-created notes for meaning
+  
+  * **user_synonyms** `array | null` - user-created synonyms for this item
 
 ### getBy(property, value)
 Returns an array of objects whose specified properties have the specified value. Can be useful for creating customized search functions.
@@ -444,14 +493,23 @@ Returns an array of objects whose specified properties have the specified value.
 ## user.kanji
 The data object for the user's kanji. This stores data from the API resource `kanji`.
 All items have the following common attributes:
+
 **character** `string` - the character(s) for this item
+
 **meaning** `string` - a comma separated string of meanings for this item
+
 **onyomi** `string` - on'yomi reading for this kanji
+
 **kunyomi** `string` - kun'yomi reading for this kanji
+
 **nanori** `string` - nanori reading for this knaji
+
 **important_reading** `string` - which reading is important (onyomi, kunyomi, or nanori)
+
 **level** `number` - the level at which this item was unlocked
+
 **user_specific** `object` - user specific information (see [user.radicals](#userradicals))
+
 
 ### getBy(property, value)
 Returns an array of objects whose specified properties have the specified value. Can be useful for creating customized search functions.
@@ -489,11 +547,17 @@ Returns an array of objects whose specified properties have the specified value.
 ## user.vocabulary
 The data object for the user's vocabulary. This stores data from the API resource `vocabulary`.
 All items have the following common attributes:
+
 **character** `string` - the character(s) for this item
+
 **kana** `string` - hiragana or katakana for this word
+
 **meaning** `string` - a comma separated string of meanings for this item
+
 **level** `number` - the level at which this item was unlocked
+
 **user_specific** `object` - user specific information (see [user.radicals](#userradicals))
+
 
 ### getBy(property, value)
 Returns an array of objects whose specified properties have the specified value. Can be useful for creating customized search functions.
