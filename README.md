@@ -1,590 +1,539 @@
 # WKW
-A client-side JavaScript wrapper for the WaniKani API
-## Usage
-The wrapper can be referenced from the global module `WKW`. It only provides a single method, `getUser(api_key)`. All wrapper functionality is bundled inside a `User` object. Each resource from the API is stored inside a corresponding data object which is a property of a `User` object.
 
-```javascript
-var user = WKW.getUser(api_key);
-user.getUserInformation().then(function() {
-    console.log("Hello, " + user.user_information.username + "!");
-});
-```
+WKW - Client Side JS Wrapper for WaniKani API
 
-## User
-The User object has the following properties:
+**Properties**
 
-### [user_information](#useruser_information)
+-   `getUser` **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** takes an api key and returns a user object
 
-### [study_queue](#userstudy_queue)
+# proto
 
-### [level_progression](#userlevel_progression)
+Prototype for user's data objects.
+Contains basic state and functionality (e.g., expiration and emptiness).
 
-### [srs_distribution](#usersrs_distribution)
+**Properties**
 
-### [recent_unlocks](#userrecent_unlocks)
+-   `time` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** the expiration time for this data type
+-   `isEmpty` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** whether or not this object is "empty"
+-   `apiResourceLoc` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** the location of this data type from the API's URL
+-   `userResourceLoc` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** the name of this data type's key in the user object
+-   `expiration` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** unix timestamp for when this object was created
+-   `isExpired` **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** returns whether or not this data has expired
 
-### [critical_items](#usercritical_items)
+# makeProto
 
-### [radicals](#userradicals)
+Factory function for objects that have proto as their prototype.
 
-### [kanji](#userkanji)
+**Parameters**
 
-### [vocabulary](#uservocabulary)
+-   `overrides` **[object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** properties to overwrite in this object's prototype
 
-### key
-**Type:** `string`
+Returns **[object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** an object whose prototype is proto
 
-The user object's API key.
+# userInformationProto
 
-### first_request_date
-**Type:** `number`
+User information prototype (user.user_information)
 
-Unix timestamp for the first request made with this user object, used for rate limiting purposes. Unless you know what you're doing, you should probably leave this alone.
+**Properties**
 
-### num_requests_made
-**Type:** `number`
+-   `username` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** user's username
+-   `gravatar` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** md5 gravatar hash for user's avatar
+-   `level` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** user's level
+-   `title` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** user's title
+-   `about` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** user's about me
+-   `website` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** user's website URL
+-   `twitter` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** user's twitter handle
+-   `topics_count` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** number of topics on message board
+-   `posts_count` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** number of posts made by user
+-   `creation_date` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** unix timestamp for account creation
+-   `vacation_date` **([number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number) | null)** unix timestamp for vacation setting
 
-Number of requests made to the API with this user object within the last hour, used for rate limiting purposes. Unless you know what you're doing, you should probably leave this alone, too.
+# studyQueueProto
 
-### isRateLimited()
-Returns true if the user is rate limited, false otherwise. This is according to the best guess by the wrapper. It's possible this method returns false when the user is actually rate limited (e.g., made API calls before using the wrapper in the same hour) so this is more of an approximation. A rate limit check is done every time the API is hit, but you can override this by passing in the optional `force` boolean to any of the methods below.
+Study queue prototype (user.study_queue)
 
-### getUserInformation(force)
+**Properties**
+
+-   `lessons_available` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** number of lessons currently available
+-   `reviews_available` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** number of reviews currently available
+-   `next_review_date` **([number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number) | null)** unix timestamp for next review (or null if vacation mode)
+-   `reviews_available_next_hour` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** number of reviews available within the next hour
+-   `reviews_available_next_day` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** number of reviews available within the next day
+
+# levelProgressionProto
+
+Level progression prototype (user.level_progression)
+
+**Properties**
+
+-   `radicals_progress` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** number of radicals completed for the current level
+-   `radicals_total` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** total number of radicals for this level
+-   `kanji_progress` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** number of kanji completed for the current level
+-   `kanji_total` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** total number of kanji for this level
+
+# srsDistributionProto
+
+SRS distribution prototype (user.srs_distribution)
+
+**Properties**
+
+-   `apprentice` **[object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** items at apprentice level
+    -   `apprentice.radicals` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** the number of radicals
+    -   `apprentice.kanji` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** the number of kanji
+    -   `apprentice.vocabulary` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** the number of vocabulary
+    -   `apprentice.total` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** the total number of items
+-   `guru` **[object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** items at guru level (same structure as apprentice)
+-   `master` **[object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** items at master level (same structure as apprentice)
+-   `enlighten` **[object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** items at enlighten level (same structure as apprentice)
+-   `burned` **[object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** items at burned level (same structure as apprentice)
+
+# listInterface
+
+Simple list interface object that provides useful functionality
+to list data objects.
+
+## getBy
+
+Returns an array of objects whose specified properties
+have the specified value.
+
+**Parameters**
+
+-   `prop` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** the property of each object to look under
+-   `value` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** the value to look for of said property
+
+Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** contains objects whose `prop` are `value`
+
+# recentUnlocksProto
+
+Recent unlocks list prototype (user.recent_unlocks)
+3 different types of objects in here
+For an example of the objects stored, please see the [WaniKani API](http://wanikani.com/api).
+
+## getBy
+
+See [listInterface](#listinterface)
+
+## getRadicals
+
+Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** containing all radicals in this
+
+## getKanji
+
+Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** containing all kanji in this
+
+## getVocabulary
+
+Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** containing all vocabulary in this
+
+## getByCharacter
+
+**Parameters**
+
+-   `character` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** desired character
+
+Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** containing all items in this with the given character
+
+## getByMeaning
+
+**Parameters**
+
+-   `meaning` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** desired meaning
+
+Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** containing all items in this with the given meaning
+
+## getByLevel
+
+**Parameters**
+
+-   `level` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** desired level
+
+Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** containing all items in this with the given level
+
+## getByUnlockedDate
+
+**Parameters**
+
+-   `unlocked_date` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** desired unlocked_date
+
+Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** containing all items in this with the given unlocked date
+
+# criticalItemsProto
+
+Critical items list prototype (user.critical_items)
+3 different types of objects in here
+For an example of the objects stored, please see the [WaniKani API](http://wanikani.com/api).
+
+## getBy
+
+See [listInterface](#listinterface)
+
+## getRadicals
+
+Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** containing all radicals in this
+
+## getKanji
+
+Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** containing all kanji in this
+
+## getVocabulary
+
+Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** containing all vocabulary in this
+
+## getByCharacter
+
+**Parameters**
+
+-   `character` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** desired character
+
+Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** containing all items in this with the given character
+
+## getByMeaning
+
+**Parameters**
+
+-   `meaning` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** desired meaning
+
+Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** containing all items in this with the given meaning
+
+## getByLevel
+
+**Parameters**
+
+-   `level` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** desired level
+
+Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** containing all items in this with the given level
+
+## getByPercentage
+
+**Parameters**
+
+-   `percentage` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** desired percentage
+
+Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** containing all items in this with the given percentage
+
+# radicalsProto
+
+Radicals list prototype (user.radicals)
+For an example of the objects stored, please see the [WaniKani API](http://wanikani.com/api).
+
+## getBy
+
+See [listInterface](#listinterface)
+
+## getByCharacter
+
+**Parameters**
+
+-   `character` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** desired character
+
+Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** containing all items in this with the given character
+
+## getByMeaning
+
+**Parameters**
+
+-   `meaning` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** desired meaning
+
+Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** containing all items in this with the given meaning
+
+## getByImage
+
+**Parameters**
+
+-   `image` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** desired image URL
+
+Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** containing all items in this with the given image url
+
+## getByLevel
+
+**Parameters**
+
+-   `level` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** desired level
+
+Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** containing all items in this with the given level
+
+# kanjiProto
+
+Kanji list prototype (user.kanji)
+For an example of the objects stored, please see the [WaniKani API](http://wanikani.com/api).
+
+## getBy
+
+See [listInterface](#listinterface)
+
+## getByCharacter
+
+**Parameters**
+
+-   `character` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** desired character
+
+Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** containing all items in this with the given character
+
+## getByMeaning
+
+**Parameters**
+
+-   `meaning` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** desired meaning
+
+Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** containing all items in this with the given meaning
+
+## getByImportantReading
+
+**Parameters**
+
+-   `important_reading` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** desired important reading
+
+Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** containing all items in this with given reading
+
+## getByLevel
+
+**Parameters**
+
+-   `level` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** desired level
+
+Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** containing all items in this with the given level
+
+# vocabularyProto
+
+Vocabulary list prototype (user.vocabulary)
+For an example of the objects stored, please see the [WaniKani API](http://wanikani.com/api).
+
+## getBy
+
+See [listInterface](#listinterface)
+
+## getByCharacter
+
+**Parameters**
+
+-   `character` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** desired character
+
+Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** containing all items in this with the given character
+
+## getByKana
+
+**Parameters**
+
+-   `kana` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** desired hiragana or katakana
+
+Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** containing all items in this with the given kana
+
+## getByMeaning
+
+**Parameters**
+
+-   `meaning` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** desired meaning
+
+Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** containing all items in this with the given meaning
+
+## getByLevel
+
+**Parameters**
+
+-   `level` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** desired level
+
+Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** containing all items in this with the given level
+
+# deepCopy
+
+Performs a deep copy on parent over to child.
+Catches objects / arrays.
+
+**Parameters**
+
+-   `parent` **[object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object to be copied from
+-   `child` **[object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object to copy to
+
+# updateRateLimiting
+
+Updates rate limiting information
+before making a request to the API.
+
+**Parameters**
+
+-   `user` **[object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the user object
+
+# retrieveObjectData
+
+Retrieves data for given object.
+Takes a spec object with the following
+attributes:
+
+**Parameters**
+
+-   `spec` **[object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** spec object for passing params
+    -   `spec.user` **[object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the user object
+    -   `spec.obj` **[object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object whose data needs to be retrieved
+    -   `spec.param` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** optional parameter (e.g., percentages, levels, etc.)
+    -   `spec.force` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** optional param to force the api call regardless of rate limiting
+
+Returns **[object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a Promise object
+
+# isExpiredOrEmpty
+
+Checks if an object is expired or empty.
+
+**Parameters**
+
+-   `obj` **[object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** object to check
+
+Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** whether or not the object is expired or empty
+
+# numbersAreValid
+
+Checks if given numbers are valid for
+certain parameters. (e.g., levels, percentages, etc.)
+
+**Parameters**
+
+-   `numbers` **([string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) \| [number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number))** numbers requested
+-   `min` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** the min the numbers can be
+-   `max` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** the max the numbers can be
+
+Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** whether or not the given numbers are valid
+
+# getSpecObject
+
+Returns **[object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a spec object for any given getter method
+which should be handed over to retrieveObjectData.
+
+# user
+
+prototype object for users
+
+## isRateLimited
+
+Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the user is rate limited, false otherwise.
+
+## getUserInformation
+
 Retrieves the user's information.
-#### Parameters
-**force** `boolean` Whether or not to ignore rate limiting. True will make the call even if the user is supposed to be rate limited.
 
-**Returns:** a Promise object
+**Parameters**
 
-### getStudyQueue(force)
+-   `force` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** whether or not to force the call to the api
+
+Returns **[object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a Promise object
+
+## getStudyQueue
+
 Retrieves the user's study queue.
-#### Parameters
-**force** `boolean` Whether or not to ignore rate limiting. True will make the call even if the user is supposed to be rate limited.
 
-**Returns:** a Promise object
+**Parameters**
 
-### getLevelProgression(force)
+-   `force` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** whether or not to force the call to the api
+
+Returns **[object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a Promise object
+
+## getLevelProgression
+
 Retrieves the user's level progression.
-#### Parameters
-**force** `boolean` Whether or not to ignore rate limiting. True will make the call even if the user is supposed to be rate limited.
 
-**Returns:** a Promise object
+**Parameters**
 
-### getSRSDistribution(force)
+-   `force` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** whether or not to force the call to the api
+
+Returns **[object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a Promise object
+
+## getSRSDistribution
+
 Retrieves the user's SRS distribution.
-#### Parameters
-**force** `boolean` Whether or not to ignore rate limiting. True will make the call even if the user is supposed to be rate limited.
 
-**Returns:** a Promise object
+**Parameters**
 
-### getRecentUnlocks(limit, force)
+-   `force` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** whether or not to force the call to the api
+
+Returns **[object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a Promise object
+
+## getRecentUnlocksList
+
 Retrieves the user's recent unlocks list.
-#### Parameters
-**limit** `string` Limit for the number of items returned
 
-**force** `boolean` Whether or not to ignore rate limiting. True will make the call even if the user is supposed to be rate limited.
+**Parameters**
 
-**Returns:** a Promise object
+-   `limit` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** limit for number of items returned
+-   `force` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** whether or not to force the call to the api
 
-### getAllData()
-Retrieves all user data from the API by calling all other user methods.
+Returns **[object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a Promise object
 
-**Returns:** a Promise object only when all calls have completed
+## getCriticalItemsList
 
-## user.user_information
-The data object for the user's information. This stores data from the API resource `user-information`.
+Retrieves the user's critical items list.
 
-### username
-**Type:** `string`
+**Parameters**
 
-The user's username
+-   `percentage` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** percentage correct
+-   `force` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** whether or not to force the call to the api
 
-### gravatar
-**Type:** `string | null`
+Returns **[object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a Promise object
 
-The user's gravatar hash
+## getRadicalsList
 
-### level
-**Type:** `number`
+Retrieves the user's radicals list.
 
-The user's level
+**Parameters**
 
-### title
-**Type:** `string`
+-   `levels` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** radicals of given level(s)
+-   `force` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** whether or not to force the call to the api
 
-The user's title
+Returns **[object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a Promise object
 
-### about
-**Type:** `string | null`
+## getKanjiList
 
-The user's "about me"
+Retrieves the user's kanji list.
 
-### website
-**Type:** `string | null`
+**Parameters**
 
-The user's website's URL
+-   `levels` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** kanji of given level(s)
+-   `force` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** whether or not to force the call to the api
 
-### twitter
-**Type:** `string | null`
+Returns **[object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a Promise object
 
-The user's twitter
+## getVocabularyList
 
-### topics_count
-**Type:** `number`
+Retrieves the user's voabulary list.
 
-The number of topics created on the message boards
+**Parameters**
 
-### posts_count
-**Type:** `number`
+-   `levels` **([string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) \| [number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number))** vocabulary of given level(s)
+-   `force` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** whether or not to force the call to the api
 
-The number of post created on the message boards
+Returns **[object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a Promise object
 
-### creation_date
-**Type:** `number`
+## getAllData
 
-Unix timestamp for the date the user's account was created
+Retrieves all data for the user.
 
-### vacation_date
-**Type:** `number | null`
+Returns **[object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a Promise object
 
-Unix timestamp for when user went into vacation mode
+# getUser
 
-### getAvatar()
-**Returns:** `string` the gravatar URL for this user's avatar.
+Factory for user objects.
 
-## user.study_queue
-The data object for the user's study queue. This stores data from the API resource `study-queue`.
+**Parameters**
 
-### lessons_available
-**Type:** `number`
+-   `api_key` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** user's WK API key
 
-Number of lessons currently available
+Returns **[object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a User object
 
-### reviews_available
-**Type:** `number`
+# storageAvailable
 
-Number of reviews currently available
+Tests whether or not browser supports local storage.
 
-### next_review_date
-**Type:** `number | null`
+**Parameters**
 
-Unix timestamp for next review (or null if vacation mode)
+-   `type`  
 
-### reviews_available_next_hour
-**Type:** `number`
+Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if supported, false otherwise
 
-Number of reviews available within the next hour
+# getStoredData
 
-### reviews_available_next_day
-**Type:** `number`
+Retrieves any data from localStorage and
+keeps a local cache inside the users object.
+Called on initializing WKW and available in debug.
 
-Number of reviews available within the next day
+# saveUsers
 
-## user.level_progression
-The data object for the user's level progression. This stores data from the API resource `level-progression`.
-
-### radicals_progress
-**Type:** `number`
-
-The number of radicals completed for the current level
-
-### radicals_total
-**Type:** `number`
-
-The total number of radicals for this level
-
-### kanji_progress
-**Type:** `number`
-
-The number of kanji completed for the current level
-
-### kanji_total
-**Type:** `number`
-
-The total number of kanji for this level
-
-## user.srs_distribution
-The data object for the user's SRS distribution. This stores data from the API resource `srs-distribution`.
-
-### apprentice
-**Type:** `object`
-
-Items that are at the apprentice level.
-
-#### radicals
-**Type:** `number`
-
-The number of radicals at the apprentice level.
-
-#### kanji
-**Type:** `number`
-
-The number of kanji at the apprentice level.
-
-#### vocabulary
-**Type:** `number`
-
-The number of vocabulary items at the apprentice level.
-
-#### total
-**Type:** `number`
-
-The total number of items at the apprentice level.
-
-### guru
-**Type:** `object`
-
-Items that are at the guru level. (Same items as apprentice, above)
-
-### master
-**Type:** `object`
-
-Items that are at the master level. (Same items as apprentice, above)
-
-### enlighten
-**Type:** `object`
-
-Items that are at the enlightened level. (Same items as apprentice, above)
-
-### burned
-**Type:** `object`
-
-Items that are at the burned level. (Same items as apprentice, above)
-
-### totalRadicals()
-**Returns:** `number` the total number of radicals.
-
-### totalKanji()
-**Returns:** `number` the total number of kanji.
-
-### totalVocabulary()
-**Returns:** `number` the total number of vocabulary words.
-
-### totalItems()
-**Returns:** `number` the total number of items.
-
-## user.recent_unlocks
-The data object for the user's recent unlocks. This stores data from the API resource `recent-unlocks`.
-All items have the following common attributes:
-
-**type** `string` - type of item in the list (radical, kanji, vocabulary)
-
-**character** `string` - the character(s) for this item
-
-**meaning** `string` - a comma separated string of meanings for this item
-
-**level** `number` - the level at which this item was unlocked
-
-**unlocked_date** `number` - unix timestamp for when this item was unlocked
-
-### Vocabulary only:
-
-**kana** `string` - the katana or hiragana representation for this word
-
-### Radical only:
-
-**image** `string | null` - the URL of the image, if any (otherwise null)
-
-### Kanji only:
-
-**onyomi** `string` - the on'yomi reading for this kanji
-
-**kunyomi** `string` - the kun'yomi reading for this kanji
-
-**nanori** `string` - the nanori reading for this kanji
-
-**important_reading** `string` - which reading is important for this kanji (onyomi, kunyomi, or nanori)
-
-### getBy(property, value)
-Returns an array of objects whose specified properties have the specified value. Can be useful for creating customized search functions.
-#### Parameters
-**property** `string` the desired property to filter by (e.g., `level`)
-
-**value** `string | number` the desired value search for
-
-**Returns:** `array` objects stored in this data object whose given properties have the desired value
-
-### getRadicals()
-**Returns:** `array` an array of all radicals in this object.
-
-### getKanji()
-**Returns:** `array` an array of all kanji in this object.
-
-### getVocabulary()
-**Returns:** `array` an array of all vocabulary in this object.
-
-### getByCharacter(character)
-#### Parameters
-**character** `string` the desired character
-
-**Returns:** `array` an array of all items in this object with the given character.
-
-### getByMeaning(meaning)
-#### Parameters
-**meaning** `string` the desired meaning
-
-**Returns:** `array` an array of all items in this object with the given meaning.
-
-### getByLevel(level)
-#### Parameters
-**level** `number` the desired level
-
-**Returns:** `array` an array of all items in this object with the given level.
-
-### getByUnlockedDate(unlocked_date)
-#### Parameters
-**unlocked_date** `number` the unix timestamp of the desired unlocked date
-
-**Returns:** `array` an array of all items in this object with the given unlocked_date (unix timestamp).
-
-## user.critical_items
-The data object for the user's critical items. This stores data from the API resource `critical-items`.
-All items have the following common attributes:
-
-**type** `string` - type of item in the list (radical, kanji, vocabulary)
-
-**character** `string` - the character(s) for this item
-
-**meaning** `string` - a comma separated string of meanings for this item
-
-**level** `number` - the level at which this item was unlocked
-
-**percentage** `number` - what percentage this item has been reviewed correctly
-
-### Vocabulary only:
-
-**kana** `string` - the katana or hiragana representation for this word
-
-### Radical only:
-
-**image** `string | null` - the URL of the image, if any (otherwise null)
-
-### Kanji only:
-
-**onyomi** `string` - the on'yomi reading for this kanji
-
-**kunyomi** `string` - the kun'yomi reading for this kanji
-
-**nanori** `string` - the nanori reading for this kanji
-
-**important_reading** `string` - which reading is important for this kanji (onyomi, kunyomi, or nanori)
-
-
-### getBy(property, value)
-Returns an array of objects whose specified properties have the specified value. Can be useful for creating customized search functions.
-#### Parameters
-**property** `string` the desired property to filter by (e.g., `level`)
-
-**value** `string | number` the desired value search for
-
-**Returns:** `array` objects stored in this data object whose given properties have the desired value
-
-### getRadicals()
-**Returns:** `array` an array of all radicals in this object.
-
-### getKanji()
-**Returns:** `array` an array of all kanji in this object.
-
-### getVocabulary()
-**Returns:** `array` an array of all vocabulary in this object.
-
-### getByCharacter(character)
-#### Parameters
-**character** `string` the desired character
-
-**Returns:** `array` an array of all items in this object with the given character.
-
-### getByMeaning(meaning)
-#### Parameters
-**meaning** `string` the desired meaning
-
-**Returns:** `array` an array of all items in this object with the given meaning.
-
-### getByLevel(level)
-#### Parameters
-**level** `number` the desired level
-
-**Returns:** `array` an array of all items in this object with the given level.
-
-### getByPercentage(percentage)
-#### Parameters
-**percentage** `number` the desired percentage
-
-**Returns:** `array` an array of all items in this object with the given percentage.
-
-## user.radicals
-The data object for the user's radicals. This stores data from the API resource `radicals`.
-All items have the following common attributes:
-
-**character** `string` - the character(s) for this item
-
-**meaning** `string` - a comma separated string of meanings for this item
-
-**image** `string | null` - url for the image of this item
-
-**level** `number` - the level at which this item was unlocked
-
-**user_specific** `object` - user specific information
-
-  * **srs** `string` - the group this item is in (apprentice, guru, etc.)
-  
-  * **srs_numeric** `number` - tbd
-  
-  * **unlocked_date** `number` - unix timestamp for when this item was unlocked
-  
-  * **available_date** `number` - unix timestamp for when this item will be ready for review
-  
-  * **burned** `boolean` - whether or not this item is burned
-  
-  * **burned_date** `number` - unix timestamp for when this item was burned (0 if not burned)
-  
-  * **meaning_correct** `number` - number of times meaning was answered correctly
-  
-  * **meaning_incorrect** `number` - number of times meaning was answered incorrectly
-  
-  * **meaning_max_streak** `number` - highest number of times meaning was answered correctly
-  
-  * **meaning_current_streak** `number` - current streak of consecutively correct answers
-  
-  * **reading_correct** `number | null` - number of times reading was answered correctly
-  
-  * **reading_incorrect** `number | null` - number of times reading was answered incorrectly
-  
-  * **reading_max_streak** `number | null` - highest number of times meaning was answered correctly consecutively
-  
-  * **reading_current_streak** `number | null` - current number of times meaning was answered correctly consecutively
-  
-  * **meaning_note** `string | null` - user-created notes for meaning
-  
-  * **user_synonyms** `array | null` - user-created synonyms for this item
-
-### getBy(property, value)
-Returns an array of objects whose specified properties have the specified value. Can be useful for creating customized search functions.
-#### Parameters
-**property** `string` the desired property to filter by (e.g., `level`)
-
-**value** `string | number` the desired value search for
-
-**Returns:** `array` objects stored in this data object whose given properties have the desired value
-
-### getByCharacter(character)
-#### Parameters
-**character** `string` the desired character
-
-**Returns:** `array` an array of all items in this object with the given character.
-
-### getByMeaning(meaning)
-#### Parameters
-**meaning** `string` the desired meaning
-
-**Returns:** `array` an array of all items in this object with the given meaning.
-
-### getByImage(imageURL)
-#### Parameters
-**imageURL** `string` the desired image URL
-**Returns:** `array` an array of all items in this object with the given image URL.
-
-### getByLevel(level)
-#### Parameters
-**level** `number` the desired level
-
-**Returns:** `array` an array of all items in this object with the given level.
-
-## user.kanji
-The data object for the user's kanji. This stores data from the API resource `kanji`.
-All items have the following common attributes:
-
-**character** `string` - the character(s) for this item
-
-**meaning** `string` - a comma separated string of meanings for this item
-
-**onyomi** `string` - on'yomi reading for this kanji
-
-**kunyomi** `string` - kun'yomi reading for this kanji
-
-**nanori** `string` - nanori reading for this knaji
-
-**important_reading** `string` - which reading is important (onyomi, kunyomi, or nanori)
-
-**level** `number` - the level at which this item was unlocked
-
-**user_specific** `object` - user specific information (see [user.radicals](#userradicals))
-
-
-### getBy(property, value)
-Returns an array of objects whose specified properties have the specified value. Can be useful for creating customized search functions.
-#### Parameters
-**property** `string` the desired property to filter by (e.g., `level`)
-
-**value** `string | number` the desired value search for
-
-**Returns:** `array` objects stored in this data object whose given properties have the desired value
-
-### getByCharacter(character)
-#### Parameters
-**character** `string` the desired character
-
-**Returns:** `array` an array of all items in this object with the given character.
-
-### getByMeaning(meaning)
-#### Parameters
-**meaning** `string` the desired meaning
-
-**Returns:** `array` an array of all items in this object with the given meaning.
-
-### getByImportantReading(important_reading)
-#### Parameters
-**important_reading** `string` the desired important reading
-
-**Returns:** `array` an array of all items in this object with the given reading.
-
-### getByLevel(level)
-#### Parameters
-**level** `number` the desired level
-
-**Returns:** `array` an array of all items in this object with the given level.
-
-## user.vocabulary
-The data object for the user's vocabulary. This stores data from the API resource `vocabulary`.
-All items have the following common attributes:
-
-**character** `string` - the character(s) for this item
-
-**kana** `string` - hiragana or katakana for this word
-
-**meaning** `string` - a comma separated string of meanings for this item
-
-**level** `number` - the level at which this item was unlocked
-
-**user_specific** `object` - user specific information (see [user.radicals](#userradicals))
-
-
-### getBy(property, value)
-Returns an array of objects whose specified properties have the specified value. Can be useful for creating customized search functions.
-#### Parameters
-**property** `string` the desired property to filter by (e.g., `level`)
-
-**value** `string | number` the desired value search for
-
-**Returns:** `array` objects stored in this data object whose given properties have the desired value
-
-### getByCharacter(character)
-#### Parameters
-**character** `string` the desired character
-
-**Returns:** `array` an array of all items in this object with the given character.
-
-### getByKana(kana)
-**Returns:** `array` an array of all items in this object with the given kana.
-
-### getByMeaning(meaning)
-#### Parameters
-**meaning** `string` the desired meaning
-
-**Returns:** `array` an array of all items in this object with the given meaning.
-
-### getByLevel(level)
-#### Parameters
-**level** `number` the desired level
-
-**Returns:** `array` an array of all items in this object with the given level.
+Saves the local cache of users (the users object)
+in localStorage. Called after any data is updated.
