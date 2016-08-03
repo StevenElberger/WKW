@@ -6,39 +6,39 @@ describe('The getAll function', function() {
     $.mockjax([
         {
             url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/",
-            proxy: "./mocks/userInformation.json"
+            responseText: window.__mocks__["test/mocks/userInformation"]
         },
         {
             url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/study-queue",
-            proxy: "./mocks/studyQueue.json"
+            responseText: window.__mocks__["test/mocks/studyQueue"]
         },
         {
             url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/level-progression",
-            proxy: "./mocks/levelProgression.json"
+            responseText: window.__mocks__["test/mocks/levelProgression"]
         },
         {
             url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/srs-distribution",
-            proxy: "./mocks/srsDistribution.json"
+            responseText: window.__mocks__["test/mocks/srsDistribution"]
         },
         {
             url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/recent-unlocks",
-            proxy: "./mocks/recentUnlocks.json"
+            responseText: window.__mocks__["test/mocks/recentUnlocks"]
         },
         {
             url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/critical-items",
-            proxy: "./mocks/criticalItems.json"
+            responseText: window.__mocks__["test/mocks/criticalItems"]
         },
         {
             url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/radicals",
-            proxy: "./mocks/radicals.json"
+            responseText: window.__mocks__["test/mocks/radicals"]
         },
         {
             url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/kanji",
-            proxy: "./mocks/kanji.json"
+            responseText: window.__mocks__["test/mocks/kanji"]
         },
         {
             url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/vocabulary",
-            proxy: "./mocks/vocabulary.json"
+            responseText: window.__mocks__["test/mocks/vocabulary"]
         }
     ]);
     

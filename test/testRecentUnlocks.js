@@ -5,7 +5,7 @@ describe('RecentUnlocksList', function() {
     // mock the service
     $.mockjax({
         url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/recent-unlocks",
-        proxy: "./mocks/recentUnlocks.json"
+        responseText: window.__mocks__["test/mocks/recentUnlocks"]
     });
 
     it('should have three different types', function(done) {

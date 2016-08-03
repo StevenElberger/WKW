@@ -12,7 +12,7 @@ describe('LocalStorage', function() {
     // mock the service
     $.mockjax({
         url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/",
-        proxy: "./mocks/userInformation.json"
+        responseText: window.__mocks__["test/mocks/userInformation"]
     });
 
     it('should be updated after a user\'s data is refreshed', function() {

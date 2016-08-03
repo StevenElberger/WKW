@@ -5,7 +5,7 @@ describe('StudyQueue', function() {
     // mock the service
     $.mockjax({
         url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/study-queue",
-        proxy: "./mocks/studyQueue.json"
+        responseText: window.__mocks__["test/mocks/studyQueue"]
     });
 
     it('should have a valid number of lessons_available', function(done) {

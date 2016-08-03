@@ -5,7 +5,7 @@ describe('LevelProgression', function() {
     //mock the service
     $.mockjax({
         url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/level-progression",
-        proxy: "./mocks/levelProgression.json"
+        responseText: window.__mocks__["test/mocks/levelProgression"]
     });
 
     it('should have a valid number of radicals_progress', function(done) {

@@ -5,7 +5,7 @@ describe('SRSDistribution', function() {
     // mock the service
     $.mockjax({
         url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/srs-distribution",
-        proxy: "./mocks/srsDistribution.json"
+        responseText: window.__mocks__["test/mocks/srsDistribution"]
     });
 
     it('should have an object for each level', function(done) {

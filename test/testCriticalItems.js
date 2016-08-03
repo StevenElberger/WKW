@@ -5,7 +5,7 @@ describe('CriticalItemsList', function() {
     // mock the service
     $.mockjax({
         url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/critical-items",
-        proxy: "./mocks/criticalItems.json"
+        responseText: window.__mocks__["test/mocks/criticalItems"]
     });
 
     it('should have three different types', function(done) {

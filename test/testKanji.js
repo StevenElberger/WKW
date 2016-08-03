@@ -5,7 +5,7 @@ describe('Kanji', function() {
     // mock the service
     $.mockjax({
         url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/kanji",
-        proxy: "./mocks/kanji.json"
+        responseText: window.__mocks__["test/mocks/kanji"]
     });
 
     it('should have a kanji list', function(done) {
@@ -223,7 +223,7 @@ describe('Kanji', function() {
         // mock the service
         $.mockjax({
             url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/kanji/1",
-            proxy: "./mocks/kanji.json"
+            responseText: window.__mocks__["test/mocks/kanji"]
         });
 
         it('should be able to take a single digit parameter', function(done) {
@@ -242,7 +242,7 @@ describe('Kanji', function() {
         // mock the service
         $.mockjax({
             url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/kanji/1,3",
-            proxy: "./mocks/kanjiLevel.json"
+            responseText: window.__mocks__["test/mocks/kanjiLevel"]
         });
 
         it('should be able to take a comma separated string of parameters', function(done) {

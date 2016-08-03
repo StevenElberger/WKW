@@ -5,7 +5,7 @@ describe('Radicals', function() {
     // mock the service
     $.mockjax({
         url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/radicals",
-        proxy: "./mocks/radicals.json"
+        responseText: window.__mocks__["test/mocks/radicals"]
     });
 
     it('should have a radicals list', function(done) {
@@ -237,7 +237,7 @@ describe('Radicals', function() {
         // mock the service
         $.mockjax({
             url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/radicals/1",
-            proxy: "./mocks/radicals.json"
+            responseText: window.__mocks__["test/mocks/radicals"]
         });
 
         it('should be able to take a single digit parameter', function(done) {
@@ -256,7 +256,7 @@ describe('Radicals', function() {
         // mock the service
         $.mockjax({
             url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/radicals/1,3",
-            proxy: "./mocks/radicalsLevel.json"
+            responseText: window.__mocks__["test/mocks/radicalsLevel"]
         });
 
         it('should be able to take a comma separated string of parameters', function(done) {

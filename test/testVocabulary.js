@@ -5,15 +5,14 @@ describe('Vocabulary', function() {
     // mock the service
     $.mockjax({
         url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/vocabulary",
-        proxy: "./mocks/vocabulary.json"
+        responseText: window.__mocks__["test/mocks/vocabulary"]
     });
 
-    it('should have a vocabulary list', function(done) {
+    it('should have a vocabulary list', function() {
         testUser.getVocabularyList().then(function() {
             assert.isNotNull(testUser.vocabulary);
             assert.isNotNull(testUser.vocabulary[0]);
             assert.isNotNull(testUser.vocabulary[1]);
-            done();
         });
     });
 
@@ -95,12 +94,13 @@ describe('Vocabulary', function() {
         });
     });
 
-    it('should allow retrieval specified by level', function() {
+    it('should allow retrieval specified by level', function(done) {
         testUser.getVocabularyList().then(function() {
             var resultArray = testUser.vocabulary.getByLevel(1);
             assert.isNotNull(resultArray);
             assert.equal(resultArray.length, 2);
             assert.equal(resultArray[1].level, 1);
+            done();
         });
     });
 
@@ -234,7 +234,7 @@ describe('Vocabulary', function() {
         // mock the service
         $.mockjax({
             url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/vocabulary/1",
-            proxy: "./mocks/vocabulary.json"
+            responseText: window.__mocks__["test/mocks/vocabulary"]
         });
 
         it('should be able to take a single digit parameter', function(done) {
@@ -253,7 +253,7 @@ describe('Vocabulary', function() {
         // mock the service
         $.mockjax({
             url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/vocabulary/1,3",
-            proxy: "./mocks/vocabularyLevel.json"
+            responseText: window.__mocks__["test/mocks/vocabularyLevel"]
         });
 
         it('should be able to take a comma separated string of parameters', function(done) {

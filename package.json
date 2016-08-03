@@ -1,0 +1,25 @@
+{
+  "name": "wkw",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Client Side JS Wrapper for WaniKani API",
+  "repository": "https://github.com/StevenElberger/WKW",
+  "dependencies": {
+    "jquery": "^3.1.0",
+    "karma": "^0.13.22",
+    "karma-chai": "^0.1.0",
+    "karma-mocha": "^0.1.4",
+    "karma-chrome-launcher": "^0.2.3",
+    "karma-firefox-launcher": "^0.1.7",
+    "karma-junit-reporter": "^0.4.1"
+  },
+  "scripts": {
+    "prestart": "npm install",
+    "start": "node ./bin/www",
+    "pretest": "npm install",
+    "test": "karma start karma.conf.js"
+  },
+  "devDependencies": {
+    "karma-json-fixtures-preprocessor": "0.0.6"
+  }
+}

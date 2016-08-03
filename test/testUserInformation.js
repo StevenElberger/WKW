@@ -1,11 +1,12 @@
 var assert = chai.assert;
 
 describe('UserInformation', function() {
+
     var testUser = WKW.getUser('bbf426d6937cbb77d9f908c08d90c3ce');
     // mock the service
     $.mockjax({
         url: "https://www.wanikani.com/api/user/bbf426d6937cbb77d9f908c08d90c3ce/",
-        proxy: "./mocks/userInformation.json"
+        responseText: window.__mocks__["test/mocks/userInformation"]
     });
 
     it('should have a valid username', function(done) {
