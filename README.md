@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/StevenElberger/WKW.svg?branch=master)](https://travis-ci.org/StevenElberger/WKW)
 # WKW
 
 WKW - Client Side JS Wrapper for WaniKani API
