@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/StevenElberger/WKW.svg?branch=master)](https://travis-ci.org/StevenElberger/WKW)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c32206ead0d043d2b3afde4fc151c996)](https://www.codacy.com/app/stevenelberger/WKW?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=StevenElberger/WKW&amp;utm_campaign=Badge_Grade)
 # WKW
 
 WKW - Client Side JS Wrapper for WaniKani API
